@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mappa</title>
+</head>
+<body>
+     <!-- definizione stile mappa -->
+     <style>
+        #mapid { 
+          height: 300px; 
+          margin-top: 50px;
+        }
+    </style>
+
+    <!-- inserimento mappa -->
+
+    <div id="mapid"></div>
+    
+    <script>
+        const latBologna = 44.494887;
+        const lonBologna = 11.3426163;
+        // Setup della mappa alla posizione di Bologna
+        // 13 = livello di zoom sulla mappa
+        var map = L.map('mapid').setView([latBologna, lonBologna], 13);
+
+        const attribution = '&copy; <a href="htts://www.openstreetmap.org/copyright"> OpenStreetMap </a>contributors';
+        const tUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+        const tiles = L.tileLayer(tUrl, { attribution });
+        tiles.addTo(map);        
+
+        window.addEventListener("load", setupStrutture);
+
+        async function setupStrutture() {
+          const strutture = await getStrutture();
+          for (let i = 2; i < strutture.markersInfo.length; i += 2) {
+            var lon = strutture.markersInfo[i][0];
+            var lat = strutture.markersInfo[i][1];
+            var descrizione = strutture.markersInfo[i + 1];
+            if (!isNaN(lat) && !isNaN(lon)) {
+              var markerStruttura = new L.LatLng(lat, lon);
+              var marker = new L.Marker(markerStruttura);
+              map.addLayer(marker);
+              marker.bindPopup(descrizione);
+            } else {
+              console.log("Posizione assente per " + descrizione);
+              const par = document.getElementById("pid");
+              par.innerHTML += descrizione;
+            }
+          }
+        }
+    </script>
+</body>
+</html>
