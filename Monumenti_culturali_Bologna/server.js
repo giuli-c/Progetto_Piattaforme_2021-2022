@@ -40,7 +40,7 @@ app.get('/mappa', (req,res) => {
 // 2° END POINT. Necessario per caricare i dati dal file csv
 app.get('/datacsv', (req, res) => {
     console.log("Carico dati")
-    res.type('text/csv').sendFile(__dirname + '/views/data.csv');
+    res.type('text/csv').sendFile(__dirname + '/views/DataStrutture.csv');
 })
 
 app.listen(4000)

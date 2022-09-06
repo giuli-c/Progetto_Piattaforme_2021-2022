@@ -30,21 +30,22 @@
 </head>
 <body>
 
-  <a href="/views/ricerca" class="btn">Ricerca Struttura</a>
+  <div class="container text-center">
+    <a href="/views/ricerca" class="btn">Ricerca Struttura</a>
 
-  <!-- definizione stile mappa -->
-  <style>
-      #mapid { 
-        height: 300px; 
-        margin-top: 50px;
-      }
-  </style>
+    <!-- definizione stile mappa -->
+    <style>
+        #mapid { 
+          height: 300px; 
+          margin-top: 50px;
+        }
+    </style>
 
-  <!-- inserimento mappa -->
+    <!-- inserimento mappa -->
 
-  <div id="mapid"></div>
+    <div id="mapid"></div>
 
-    <table class=" table-hover">
+    <table style="margin-top: 20px">
         <thead style="background-color: blue; color: white">
         <th scope="col">Quartiere</th>
         <th scope="col">Categoria</th>
@@ -52,75 +53,85 @@
         <th scope="col">Descrizione</th>
         <th scope="col">Indirizzo</th>
         </thead>
-        <tbody id="tabellaeventi"></tbody>
+        <tbody id="tabellaDati"></tbody>
     </table>
-    </div>
 
-  <script>
-      const latBologna = 44.494887;
-      const lonBologna = 11.3426163;
-      // Setup della mappa alla posizione di Bologna
-      // L= oggetto dell'interfaccia per poter accedere ai metodi
-      // 13 = livello di zoom sulla mappa
-      var map = L.map('mapid').setView([latBologna, lonBologna], 13);
+    <script>
+        const latBologna = 44.494887;
+        const lonBologna = 11.3426163;
+       
+        // open street map diventa la base dei dati
+        // 1. uso open street map
+        const attribution = '&copy; <a href="htts://www.openstreetmap.org/copyright"> OpenStreetMap </a>contributors';
+        // 2. formato per open street map per accedere ai dati
+        const tUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+        // 3. carico il formato come layer della mappa e lo aggiungo al contenitore della mappa stessa 
+        const tiles = L.tileLayer(tUrl, { attribution });
 
-      // open street map diventa la base dei dati
-      // 1. uso open street map
-      const attribution = '&copy; <a href="htts://www.openstreetmap.org/copyright"> OpenStreetMap </a>contributors';
-      // 2. formato per open street map per accedere ai dati
-      const tUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
-      // 3. carico il formato come layer della mappa e lo aggiungo al contenitore della mappa stessa 
-      const tiles = L.tileLayer(tUrl, { attribution });
-      tiles.addTo(map);        
+        // Setup della mappa alla posizione di Bologna
+        // L= oggetto dell'interfaccia per poter accedere ai metodi, 13 = livello di zoom sulla mappa
+        var map = L.map('mapid').setView([latBologna, lonBologna], 13);
+        tiles.addTo(map);        
 
-      // al caricare della pagina viene chiamata la funzione "setupstrutture"
-      window.addEventListener("load", setupStrutture);
+        // al caricare della pagina viene chiamata la funzione "setupstrutture"
+        window.addEventListener("load", setupStrutture);
 
-      // scorro a gruppi di due, perchè ogni 2 indici ho l'info in merito ad ogni struttura
-      async function setupStrutture() {
-        const strutture = await getStrutture();
-        for (let i = 2; i < strutture.markersInfo.length; i += 2) {
-          var lon = strutture.markersInfo[i][0];
-          var lat = strutture.markersInfo[i][1];
-          var descrizione = strutture.markersInfo[i + 1];
-          if (!isNaN(lat) && !isNaN(lon)) {
-            var markerStruttura = new L.LatLng(lat, lon);
-            var marker = new L.Marker(markerStruttura);
-            map.addLayer(marker);
-            
-            marker.bindPopup(descrizione);
-          } else {
-            console.log("Posizione assente per " + descrizione);
+        // scorro a gruppi di due, perchè ogni 2 indici ho l'info in merito ad ogni struttura
+        async function setupStrutture() {
+          const strutture = await getStrutture();
+          for (let i = 2; i < strutture.markersInfo.length; i += 2) {
+            var lon = strutture.markersInfo[i][0];
+            var lat = strutture.markersInfo[i][1];
+            var descrizione = strutture.markersInfo[i + 1];
+            if (!isNaN(lat) && !isNaN(lon)) {
+              var markerStruttura = new L.LatLng(lat, lon);
+              var marker = new L.Marker(markerStruttura);
+              map.addLayer(marker);
+              
+              marker.bindPopup(descrizione);
+            } else {
+              console.log("Posizione assente per " + descrizione);
+            }
           }
         }
-      }
 
-      // chiamata http al sever dove vengono chiesti tutti i dati csv
-      async function getStrutture() {
-          const response = await fetch("/datacsv");
-          const data = await response.text();
+        // chiamata http al sever dove vengono chiesti tutti i dati csv
+        async function getStrutture() {
+            const response = await fetch("/datacsv");
+            const data = await response.text();
 
-          const markersInfo = []; // [lat,lon] vettore
-          const rows = data.split("\n"); // Quartiere, Categorie, Denominazione, Descrizione, Indirizzo, Latitudine, Longitudine
+            const markersInfo = []; // [lat,lon] vettore
+            const rows = data.split("\n"); // Quartiere, Categorie, Denominazione, Descrizione, Indirizzo, Latitudine, Longitudine
+            var primaRiga = 0;
+            // viene eseguito il parsing del csv
+            rows.forEach(row => {
+              const cols = row.split(';'); 
+              const descrizione = 
+                "Quartiere: " + cols[0] + "<br>" +
+                "Categoria: " + cols[1] + "<br>" +
+                "Denominazione: " + cols[2] + "<br>" +
+                "Descrizione: " + cols[3] + "<br>" +
+                "Indirizzo: " + cols[4] + "<br>";
 
-          // viene eseguito il parsing del csv
-          rows.forEach((row) => {
-            const cols = row.split(';'); 
-            const descrizione = 
-              "Quartiere: " + cols[0] + "<br>" +
-              "Categoria: " + cols[1] + "<br>" +
-              "Denominazione: " + cols[2] + "<br>" +
-              "Descrizione: " + cols[3] + "<br>" +
-              "Indirizzo: " + cols[4] + "<br>";
+                if (primaRiga != 0){
+                    // popolo la struttura con info di latitudine e longitudine
+                    markersInfo.push([parseFloat(cols[6]), parseFloat(cols[5])]);
+                    markersInfo.push(descrizione);
+                    inserimentoInTabella = 
+                      "<td>" + cols[0] + "</td>" +
+                      "<td>" + cols[1] + "</td>" +
+                      "<td>" + cols[2] + "</td>" +                
+                      "<td>" + cols[3] + "</td>" +
+                      "<td>" + cols[4] + "</td>";
+                      document.getElementById("tabellaDati").innerHTML += inserimentoInTabella;
+                  }
+                  primaRiga++;
+                });
+            return { markersInfo };
+          }
 
-            // popolo la struttura con info di latitudine e longitudine
-            markersInfo.push([parseFloat(cols[5]), parseFloat(cols[6])]);
-            markersInfo.push(descrizione);
-          });
-          return { markersInfo };
-        }
-
-  </script>
+    </script>
+  </div>
 
 </body>
 </html>
