@@ -31,7 +31,7 @@
 <body>
 
   <div class="container text-center">
-    <a href="/views/tabella" class="btn">Lista completa</a>
+    <a href="/views/ricerca" class="btn">Ricerca Struttura</a>
 
     <!-- definizione stile mappa -->
     <style>
@@ -44,6 +44,48 @@
     <!-- inserimento mappa -->
 
     <div id="mapid"></div>
+
+    <style>
+        .dropbtn{
+            background-color: blue; 
+            color: white;
+            padding: 16px;
+            font-size: 16px;
+            border: none"
+        }       
+
+        .dropdown {
+        position: relative;
+        display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: lightskyblue;
+            min-width: 200px;
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {background-color: white;}
+        .dropdown:hover .dropdown-content {display: block;}
+        .dropdown:hover .dropbtn {background-color: lightblue;}
+    </style>
+
+    <div class="dropdown">
+    <button class="dropbtn" id="print" onclick="stampaCategoria()">Categorie</button>
+    <div class="dropdown-content">
+
+    <p id="musei">Musei</p>
+    <p id="gallerie">Gallerie</p>
+    <p id="teatri">Teatri storici</p>
 
     <script>
         const latBologna = 44.494887;
@@ -90,35 +132,50 @@
             const data = await response.text();
 
             const markersInfo = []; // [lat,lon] vettore
+
+            markersInfo.push([parseFloat(cols[6]), parseFloat(cols[5])]);
+            markersInfo.push(descrizione);
+
+            return { markersInfo };
+        }
+
+        
+        function stampaCategoria() {
             const rows = data.split("\n"); // Quartiere, Categorie, Denominazione, Descrizione, Indirizzo, Latitudine, Longitudine
             var primaRiga = 0;
             // viene eseguito il parsing del csv
             rows.forEach(row => {
-              const cols = row.split(';'); 
-              const descrizione = 
+            const cols = row.split(';'); 
+            const descrizione = 
                 cols[0] + "<br>" +
                 cols[1] + "<br>" +
                 cols[2] + "<br>" +
                 cols[4] + "<br>";
 
-                // popolo la struttura con info di latitudine e longitudine
-                markersInfo.push([parseFloat(cols[6]), parseFloat(cols[5])]);
-                markersInfo.push(descrizione);
+                if (primaRiga != 0){
+                    // popolo la struttura con info di latitudine e longitudine
+                    inserimentoInTabella = 
+                      "<td>" + cols[0] + "</td>" +
+                      "<td>" + cols[1] + "</td>" +
+                      "<td>" + cols[2] + "</td>" +                
+                      "<td>" + cols[3] + "</td>" +
+                      "<td>" + cols[4] + "</td>";
+                      document.getElementById("musei").innerHTML += inserimentoInTabella;
+                  }
+                  primaRiga++;
                 });
-            return { markersInfo };
+           
           }
+
+
+
+
+
+
+           
 
     </script>
   </div>
 
-  <p style="margin-top:30px; margin-left: 100px; font-size: 16px;"> Credi che il sito non sia abbastanza aggiornato?<br>
-    Qui di seguito avrai la possibilità di gestire al meglio ogni struttura. <br>
-    Potrai ricercare le strutture per nome, quartiere o categoria, inserire strutture non presenti sul sito o eliminare quelle che sono state chiuse! </p>
-
-  <div class="container text-center">
-        <a href="/views/ricerca" class="btn">Ricerca Struttura</a>
-        <a href="/views/inserisci" class="btn">Inserisci Struttura</a>
-        <a href="/views/rimuovi" class="btn">Rimuovi Struttura</a>
-  </div>
 </body>
 </html>

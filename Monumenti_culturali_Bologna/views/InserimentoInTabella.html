@@ -31,7 +31,7 @@
 <body>
 
   <div class="container text-center">
-    <a href="/views/tabella" class="btn">Lista completa</a>
+    <a href="/views/ricerca" class="btn">Ricerca Struttura</a>
 
     <!-- definizione stile mappa -->
     <style>
@@ -44,6 +44,17 @@
     <!-- inserimento mappa -->
 
     <div id="mapid"></div>
+
+    <table style="margin-top: 20px">
+        <thead style="background-color: blue; color: white">
+        <th scope="col">Quartiere</th>
+        <th scope="col">Categoria</th>
+        <th scope="col">Denominazione</th>
+        <th scope="col">Descrizione</th>
+        <th scope="col">Indirizzo</th>
+        </thead>
+        <tbody id="tabellaDati"></tbody>
+    </table>
 
     <script>
         const latBologna = 44.494887;
@@ -101,9 +112,19 @@
                 cols[2] + "<br>" +
                 cols[4] + "<br>";
 
-                // popolo la struttura con info di latitudine e longitudine
-                markersInfo.push([parseFloat(cols[6]), parseFloat(cols[5])]);
-                markersInfo.push(descrizione);
+                if (primaRiga != 0){
+                    // popolo la struttura con info di latitudine e longitudine
+                    markersInfo.push([parseFloat(cols[6]), parseFloat(cols[5])]);
+                    markersInfo.push(descrizione);
+                    inserimentoInTabella = 
+                      "<td>" + cols[0] + "</td>" +
+                      "<td>" + cols[1] + "</td>" +
+                      "<td>" + cols[2] + "</td>" +                
+                      "<td>" + cols[3] + "</td>" +
+                      "<td>" + cols[4] + "</td>";
+                      document.getElementById("tabellaDati").innerHTML += inserimentoInTabella;
+                  }
+                  primaRiga++;
                 });
             return { markersInfo };
           }
@@ -111,14 +132,5 @@
     </script>
   </div>
 
-  <p style="margin-top:30px; margin-left: 100px; font-size: 16px;"> Credi che il sito non sia abbastanza aggiornato?<br>
-    Qui di seguito avrai la possibilità di gestire al meglio ogni struttura. <br>
-    Potrai ricercare le strutture per nome, quartiere o categoria, inserire strutture non presenti sul sito o eliminare quelle che sono state chiuse! </p>
-
-  <div class="container text-center">
-        <a href="/views/ricerca" class="btn">Ricerca Struttura</a>
-        <a href="/views/inserisci" class="btn">Inserisci Struttura</a>
-        <a href="/views/rimuovi" class="btn">Rimuovi Struttura</a>
-  </div>
 </body>
 </html>
