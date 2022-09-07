@@ -3,15 +3,21 @@ const express = require('express')
 // creo server
 const app = express()
 
+
+
+
 // chiamo il modulo ejs
 const res = require('ejs')
 
 // chiamo il modulo fs
 const fs = require('fs');
 
+
+
+
 // settaggi principali
 // Inizializzazione tramite express.
-app.use(express.static("public"));
+app.use(express.static('public'));
 app.use(express.json());
 
 // Per le richieste json.
@@ -43,4 +49,21 @@ app.get('/datacsv', (req, res) => {
     res.type('text/csv').sendFile(__dirname + '/views/DataStrutture.csv');
 })
 
-app.listen(4000)
+// 3° END POINT. Necessario per la visualizzazione delle varie pagine
+app.get('/', (req, res) => {
+    res.render('./views/index.html');
+})
+
+app.get('/inserisci', (req, res) => {
+    res.render('./views/inserisci.html');
+})
+
+app.get('/rimuovi', (req, res) => {
+    res.render('./views/rimuovi.html');
+})
+
+app.get('*', (req, res) => {
+    res.render('./views/404.html');
+})
+
+app.listen(3100)
