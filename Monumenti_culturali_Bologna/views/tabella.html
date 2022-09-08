@@ -9,6 +9,7 @@
     integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" 
     crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="./style.css">
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
     integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
@@ -20,22 +21,61 @@
     crossorigin=""></script>
 
     <title>Lista Completa</title>
+
+    <style>
+        table td,
+        table th{
+            border:1px solid #c9c9c9;
+        }
+
+        thead th{
+            padding: 15px;
+        }
+
+        .btn{
+            background-color: blue;
+            color: whitesmoke;
+            margin-top:40px;
+            margin-bottom: 10px;
+        }
+
+        #research{
+            background-color: rgb(114, 149, 209);
+            color: whitesmoke;
+            margin-right: 50%;
+            margin-top:40px;
+            margin-bottom: 10px;
+        }
+
+    </style>   
   </head>
 <body>
     <h1 style="text-align:center">Centri culturali di Bologna</h1>
     <h5 style="text-align:center">Inserimento strutture.</h5>
 
   <div class="container text-center">
-    <button class="btn" onclick="window.open('/views/ricerca','_blank')">Ricerca Struttura</button>
+    <a href="/views/ricerca" class="btn" id="research">Ricerca Struttura</a>
+    <a href="/" class="btn">Torna alla Home Page</a>
+  </div>
 
+  <div class="container text-center">
     <!-- inserimento Tabella -->
     <table style="margin-top: 20px">
-        <thead style="background-color: blue; color: white">
-        <th scope="col">Denominazione</th>
-        <th scope="col">Quartiere</th>
-        <th scope="col">Indirizzo</th>
-        <th scope="col">Categoria</th>
-        <th scope="col">Descrizione</th>
+        <colgroup>
+            <col style="background-color: rgb(180, 217, 250)">
+            <col>
+            <col style="background-color: rgb(180, 217, 250)">
+            <col>
+            <col style="background-color: rgb(180, 217, 250)">
+        </colgroup>
+        <thead style="background-color: rgb(86, 86, 244)">
+            <tr>
+                <th scope="col">Denominazione</th>
+                <th scope="col">Quartiere</th>
+                <th scope="col">Indirizzo</th>
+                <th scope="col">Categoria</th>
+                <th scope="col">Descrizione</th>
+            </tr>        
         </thead>
         <tbody id="tabellaDati"></tbody>
     </table>
@@ -78,7 +118,5 @@
 
     </script>
   </div>
-
-  <button class="btn" onclick="window.open('/','_blank')" style="margin-left:50px; margin-right:200px">Torna alla Home Page</button>
 </body>
 </html>

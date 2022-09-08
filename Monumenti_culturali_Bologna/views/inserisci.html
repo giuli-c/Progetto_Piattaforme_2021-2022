@@ -9,7 +9,19 @@
         integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" 
         crossorigin="anonymous">
     <link rel="stylesheet" href="./public/style.css">
-        <title>Inserimento</title>      
+        <title>Inserimento</title>  
+        
+        <style>
+            .btn{
+                background-color: blue;
+                color: whitesmoke;
+            }
+
+            #allData{
+                background-color: rgb(180, 217, 250);
+                color: black;
+            }
+        </style>
 </head>
 <body>
     <h1 style="text-align:center">Centri culturali di Bologna</h1>
@@ -98,7 +110,7 @@
         </div>
         </form>
     </div>
-    <button class="btn" onclick="window.open('/views/tabella','_blank')" style="margin-left:200px;">Vai alla lista completa</button>
-    <button class="btn" onclick="window.open('/','_blank')" style="margin-left:50px; margin-right:200px">Torna alla Home Page</button>
+    <a href="/views/tabella" class="btn" id="allData" style="margin-right:200px">Vai alla lista completa</a>
+    <a href="/" class="btn" style="margin-left:50px; margin-right:200px">Torna alla Home Page</a>
 </body>
 </html>

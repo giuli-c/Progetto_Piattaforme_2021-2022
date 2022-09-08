@@ -64,4 +64,4 @@ app.get('*', (req, res) => {
     res.render('./views/404.html');
 })
 
-app.listen(3100)
+app.listen(3000)

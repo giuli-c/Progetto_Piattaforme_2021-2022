@@ -26,18 +26,40 @@
             In questo pagina è possibile accedere a tutte le informazioni relative a musei, gallerie d'arte e teatri presenti a Bologna.
             <p>Scopri i centri culturali storici più importanti!</p>
         </h5>
-    </h1>
+    </h1> 
 </head>
 <body>
 
   <div class="container text-center">
-    <button class="btn" onclick="window.open('/views/tabella','_blank')">Lista Completa</button>
+    <a href="/views/tabella" class="btn" id="allData">Vai alla lista completa</a>
 
-    <!-- definizione stile mappa -->
+    <!-- definizione stile mappa e bottoni -->
     <style>
         #mapid { 
           height: 300px; 
           margin-top: 50px;
+        }
+
+        #research{
+            background-color: rgb(114, 149, 209);
+            color: whitesmoke;
+        }
+
+        #insert{
+          background-color: rgb(90, 238, 238);
+          color: whitesmoke;
+        }
+
+        #remove{
+          background-color: rgb(27, 27, 119);
+          color: whitesmoke;
+          margin-right: 10%;
+        }
+
+        #allData{
+                background-color: rgb(180, 217, 250);
+                color: black;
+                margin-top: 20px;
         }
     </style>
 
@@ -115,10 +137,10 @@
     Qui di seguito avrai la possibilità di gestire al meglio ogni struttura. <br>
     Potrai ricercare le strutture per nome, quartiere o categoria, inserire strutture non presenti sul sito o eliminare quelle che sono state chiuse! </p>
 
-  <div class="container text-center">
-      <button class="btn" onclick="window.open('/views/ricerca','_blank')">Ricerca Struttura</button>
-      <button class="btn" onclick="window.open('/views/inserisci','_blank')">Inserisci Struttura</button>
-      <button class="btn" onclick="window.open('/views/rimuovi','_blank')">Rimuovi Struttura</button>
+  <div class="container text-center" style="margin-right: 30px;">
+    <a href="/views/inserisci" class="btn" id="insert">Inserisci Struttura</a>
+    <a href="/views/ricerca" class="btn" id="research" >Ricerca Struttura</a>
+    <a href="/views/rimuovi" class="btn" id="remove">Rimuovi Struttura</a>
   </div>
 </body>
 </html>
