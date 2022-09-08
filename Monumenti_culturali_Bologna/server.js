@@ -36,12 +36,6 @@ app.set('views', __dirname);
 app.get('/', (req, res) => {
     res.render('./views/index.html');
 })
-/*
-// end point per rendering pagina HTML
-app.get('/mappa', (req,res) => {
-    res.render('./view/index.html');
-})
-*/
 
 // 2° END POINT. Necessario per caricare i dati dal file csv
 app.get('/datacsv', (req, res) => {
@@ -54,12 +48,16 @@ app.get('/', (req, res) => {
     res.render('./views/index.html');
 })
 
-app.get('/inserisci', (req, res) => {
+app.get('/views/inserisci', (req, res) => {
     res.render('./views/inserisci.html');
 })
 
-app.get('/rimuovi', (req, res) => {
+app.get('/views/rimuovi', (req, res) => {
     res.render('./views/rimuovi.html');
+})
+
+app.get('/views/tabella', (req, res) => {
+    res.render('./views/tabella.html');
 })
 
 app.get('*', (req, res) => {

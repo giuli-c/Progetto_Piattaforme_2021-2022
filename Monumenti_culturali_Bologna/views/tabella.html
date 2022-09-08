@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" 
+    rel="stylesheet" 
+    integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" 
+    crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+    integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
+    crossorigin=""/>
+    
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
+    integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
+    crossorigin=""></script>
+
+    <title>Lista Completa</title>
+  </head>
+<body>
+    <h1 style="text-align:center">Centri culturali di Bologna</h1>
+    <h5 style="text-align:center">Inserimento strutture.</h5>
+
+  <div class="container text-center">
+    <button class="btn" onclick="window.open('/views/ricerca','_blank')">Ricerca Struttura</button>
+
+    <!-- inserimento Tabella -->
+    <table style="margin-top: 20px">
+        <thead style="background-color: blue; color: white">
+        <th scope="col">Denominazione</th>
+        <th scope="col">Quartiere</th>
+        <th scope="col">Indirizzo</th>
+        <th scope="col">Categoria</th>
+        <th scope="col">Descrizione</th>
+        </thead>
+        <tbody id="tabellaDati"></tbody>
+    </table>
+
+    <script>
+        
+        // al caricare della pagina viene chiamata la funzione "inserimentoDati"
+        window.addEventListener("load", inserimentoDati); 
+
+        // chiamata http al sever dove vengono chiesti tutti i dati csv
+        async function inserimentoDati() {
+            // acquisizione dei dati
+            const response = await fetch("/datacsv");
+            const data = await response.text();
+
+            // vettore di appoggio dei dati acquisiti
+            const acquisizioneDati = []; // [lat,lon] vettore
+            const rows = data.split("\n"); // Quartiere, Categorie, Denominazione, Descrizione, Indirizzo, Latitudine, Longitudine
+            var primaRiga = 0;
+            // viene eseguito il parsing del csv
+            rows.forEach(row => {
+              const cols = row.split(';'); 
+              const dati = 
+                cols[0] + "<br>";
+
+                if (primaRiga != 0){
+                    // popolo la struttura con info di latitudine e longitudine
+                    inserimentoInTabella = 
+                      "<td>" + cols[0] + "</td>" +
+                      "<td>" + cols[1] + "</td>" +
+                      "<td>" + cols[2] + "</td>" +                
+                      "<td>" + cols[3] + "</td>" +
+                      "<td>" + cols[4] + "</td>";
+                    document.getElementById("tabellaDati").innerHTML += inserimentoInTabella;
+                  }
+                  primaRiga++;
+                });
+                acquisizioneDati.bindPopup(dati);
+          }
+
+    </script>
+  </div>
+
+  <button class="btn" onclick="window.open('/','_blank')" style="margin-left:50px; margin-right:200px">Torna alla Home Page</button>
+</body>
+</html>
