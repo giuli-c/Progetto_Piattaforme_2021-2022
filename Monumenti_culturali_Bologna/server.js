@@ -48,15 +48,19 @@ app.get('/', (req, res) => {
     res.render('./views/index.html');
 })
 
-app.get('/views/inserisci', (req, res) => {
+app.get('/inserisci', (req, res) => {
     res.render('./views/inserisci.html');
 })
 
-app.get('/views/rimuovi', (req, res) => {
+app.get('/ricerca', (req, res) => {
+    res.render('./views/ricerca.html');
+})
+
+app.get('/rimuovi', (req, res) => {
     res.render('./views/rimuovi.html');
 })
 
-app.get('/views/tabella', (req, res) => {
+app.get('/tabella', (req, res) => {
     res.render('./views/tabella.html');
 })
 
@@ -64,4 +68,4 @@ app.get('*', (req, res) => {
     res.render('./views/404.html');
 })
 
-app.listen(3000)
+app.listen(3800)

@@ -12,23 +12,27 @@
         <title>Inserimento</title>  
         
         <style>
-            .btn{
+            #home{
                 background-color: blue;
                 color: whitesmoke;
+                margin-left: 40%;
+                margin-top: 20px;
             }
 
             #allData{
                 background-color: rgb(180, 217, 250);
                 color: black;
+                margin-top: 20px;
             }
+
         </style>
 </head>
 <body>
     <h1 style="text-align:center">Centri culturali di Bologna</h1>
     <h5 style="text-align:center">Inserimento strutture.</h5>
-    <p style="text-align: center;">Compila i campi sotto riportati per inserire la Struttura mancante!</p>
+    <p style="text-align: center; margin-bottom: 40px">Compila i campi sotto riportati per inserire la Struttura mancante!</p>
 
-    <div class="container p-3 my-3 border" style="background-color:aqua; margin-top: 20px" >
+    <div class="container p-3 my-3 border" style="background-color:aqua;" >
         <form action="http://localhost:3000/inserisci" method="post"> 
             <div class="row">
                 <div class="col" style="margin-top:20px">                    
@@ -110,7 +114,9 @@
         </div>
         </form>
     </div>
-    <a href="/views/tabella" class="btn" id="allData" style="margin-right:200px">Vai alla lista completa</a>
-    <a href="/" class="btn" style="margin-left:50px; margin-right:200px">Torna alla Home Page</a>
+    <div class="container text-center">
+        <a href="/tabella" class="btn" id="allData">Vai alla lista completa</a>
+        <a href="/" class="btn" id="home">Torna alla Home Page</a>
+    </div>
 </body>
 </html>
