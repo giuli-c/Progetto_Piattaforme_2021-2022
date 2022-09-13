@@ -101,9 +101,6 @@
                     <button type="submit" onclick="cerca(2)">
                         <i class="fa fa-search"></i>
                     </button>  
-                
-                
-                    
                 </form>              
             </div>
         </div>
@@ -130,43 +127,42 @@
     
     </div>
     
-        <script>
-            async function cerca(param) {
-                console.log("funziona?");
-              let table =
-               '<table style="margin-top: 20px">' +  
-               '<thead style="background-color: rgb(86, 86, 244)">' + 
-                '<tr><th scope="col">Denominazione</th>' +
-                '<th scope="col">Quartiere</th>' +
-                '<th scope="col">Indirizzo</th>' +
-                '<th scope="col">Categoria</th>' +
-                '<th scope="col">Descrizione</th>' +
-                '</tr></thead><tbody id="tabellaeventi">';
+    <script>
+        async function cerca(param) {
+            let table =
+                '<table style="margin-top: 20px">' +  
+                '<thead style="background-color: rgb(86, 86, 244)">' + 
+                    '<tr><th scope="col">Denominazione</th>' +
+                    '<th scope="col">Quartiere</th>' +
+                    '<th scope="col">Indirizzo</th>' +
+                    '<th scope="col">Categoria</th>' +
+                    '<th scope="col">Descrizione</th>' +
+                    '</tr></thead><tbody id="tabellaeventi">';
       
-              if (param == 1) {
+            if (param === 1) {
                 let nome = document.getElementById("nome").value;
                 const res = await fetch("/DataStrutture/" + nome);
                 txt = await res.text();
                 if (res.ok) {
-        
-                    JSON.parse(txt).forEach(elemento => {
-                    params = elemento.toString().split(";");
-                    table += 
-                        '<tr><th scope="row">' + params[0] + "</th>" +
-                        "<td>" + params[1] + "</td>" +
-                        "<td>" + params[2] + "</td>" +
-                        "<td>" + params[3] + "</td>" +
-                        "<td>" + params[4];
-                    });
+                    // viene restituito un array javascript
+                    let struttura = JSON.parse(txt);
+                    struttura.forEach(elemento => {
+                        params = elemento.toString().split(";");
+                        table += 
+                            '<tr><th scope="row">' + params[0] + "</th>" +
+                            "<td>" + params[1] + "</td>" +
+                            "<td>" + params[2] + "</td>" +
+                            "<td>" + params[3] + "</td>" +
+                            "<td>" + params[4];
+                        });
                     table += "</td></tbody></table>";                
                 } else {
                     table = "ERRORE: " + txt;
                 }
-          }  
+            }  
             document.getElementById("risultato").innerHTML = table;
         }
-        </script>
-    </div>
+    </script>
     <div class="container text-center">
         <a href="/" class="btn" style="margin-top:20px;">Torna alla Home Page</a>
     </div>

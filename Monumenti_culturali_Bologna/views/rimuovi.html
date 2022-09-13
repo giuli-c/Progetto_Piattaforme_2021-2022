@@ -27,23 +27,23 @@
 </head>
 <body>
     <div class="container p-3 text-center" style="background-color: rgb(155, 196, 233);">
-        <form action="rimozione" method="delete"> 
-        <div class="row" id="colonnaNome">
-            <div class="col">
-                <p> Inserisci il nome della struttura da rimuovere </p>
+        <form action="/rimuovi" method="delete"> 
+            <div class="row" id="colonnaNome">
+                <div class="col">
+                    <p> Inserisci il nome della struttura da rimuovere </p>
+                </div>
+                <div class="col">
+                        <input 
+                            type="text" 
+                            placeholder="Search.." 
+                            name="eliminaNome" 
+                            id="nome">               
+                        <button class="btn btn-danger" onclick="rimuovi()">
+                        <i class="fa fa-trash-o fa-lg"></i> Elimina</button>
+                </div>
             </div>
-            <div class="col">
-                    <input 
-                        type="text" 
-                        placeholder="Search.." 
-                        name="eliminaNome" 
-                        id="nome">               
-                    <a class="btn btn-danger" href="#">
-                    <i class="fa fa-trash-o fa-lg"></i> Elimina</a>
-                </form>
-            </div>
-        </form>    
-        </div>
+            <div class="row" id = "risultato"></div>
+        </form>   
     </div>
     <div class="container text-center">
         <a href="/" class="btn" id="homePage" style="margin-top:20px;">Torna alla Home Page</a>
@@ -52,8 +52,9 @@
     <script>
         async function rimuovi() {
             var nome = document.getElementById("nome").value;
-            const response = await fetch('/views/rimuovi' + nome);
+            const response = await fetch('/rimuovi' + nome, {method: 'DELETE'});
             if(response.ok){
+                console.log("ELEMENTO RIMOSSO!");
                 document.getElementById("risultato").innerHTML = 'Elemento rimosso';
             }else{
                 document.getElementById("risultato").innerHTML = "ERRORE! " + txt;
