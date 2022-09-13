@@ -1,0 +1,86 @@
+<div class="form-group">
+    <div class="row">
+        <div class="col" style="margin-top:20px">                    
+            <input required
+                type="text"  
+                name="denominazione" 
+                id="denominazione"
+                placeholder="Denominazione" 
+                class="form-control" >
+        </div>
+
+        <div class="col" style="margin-top:20px">   
+            <input required
+                    type="text"  
+                    name="quartiere" 
+                    id="quartiere"
+                    placeholder="Quartiere"  
+                    class="form-control">   
+        </div>
+
+        <div class="col" style="margin-top:20px">                    
+            <input required
+                type="text"  
+                name="indirizzo" 
+                id="indirizzo"
+                placeholder="Indirizzo" 
+                class="form-control"> 
+        </div>     
+    </div>    
+
+    <div class="row">
+        <div class="col" style="margin-top:20px">
+            <select 
+                    name="categoria" 
+                    id="categoria"
+                    class="form-select"
+                    required >
+
+                    <option value="gallerie">Gallerie</option>
+                    <option value="musei">Musei</option>
+                    <option value="teatri">Teatri storici</option>
+            </select>
+        </div>
+        
+        <div class="col" style="margin-top:20px">
+                <input required
+                    type="text"  
+                    name="descrizione" 
+                    id="descrizione"
+                    placeholder="Descrizione"
+                    class="form-control" >
+        </div>
+    </div>    
+
+    <div class="row" style="margin-bottom: 20px">
+        <div class="col" style="margin-top:20px">
+            <input required
+                    type="number"
+                    name="latitudine"
+                    id="latitudine" 
+                    placeholder="Latitudine" 
+                    step="0.0001"
+                    class="form-control">
+        </div>
+
+        <div class="col" style="margin-top:20px">
+        <input required
+                type="number"
+                name="longitudine"
+                id="longitudine" 
+                placeholder="Longitudine" 
+                step="0.0001"
+                class="form-control">
+        </div>
+    </div>
+
+    <div class="row" style=" padding: 0px 0px 0px 600px;">
+    <button class="btn btn-primary" style="width: 100px" type="submit" >Conferma</button>
+    </div>
+    </form>
+    </div>
+    <div class="container text-center">
+    <a href="/views/tabella" class="btn" id="allData">Vai alla lista completa</a>
+    <a href="/" class="btn" id="home">Torna alla Home Page</a>
+    </div>
+</div>

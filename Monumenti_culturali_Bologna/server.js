@@ -2,18 +2,12 @@
 const express = require('express')
 // creo server
 const app = express()
-
-
-
+// 
 
 // chiamo il modulo ejs
 const res = require('ejs')
-
 // chiamo il modulo fs
 const fs = require('fs');
-
-
-
 
 // settaggi principali
 // Inizializzazione tramite express.
@@ -22,7 +16,7 @@ app.use(express.json());
 
 // Per le richieste json.
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({extended: true}));  // per fare leggere i dati dal form
 
 ///?????????????????????????
 // definizione del motore di ricerca html
@@ -31,36 +25,37 @@ app.set('view engine', 'html');
 // definizione di view come cartella principle
 app.set('views', __dirname);
 
-/* END POINT degli API */ 
-// 1° END POINT. Necessario per entrare nella pagina principale (index)
+/* ----------------------- END POINT GET --------------------- */ 
+// 1° ENDPOINT GET. Necessario per entrare nella pagina principale (index)
 app.get('/', (req, res) => {
     res.render('./views/index.html');
 })
 
-// 2° END POINT. Necessario per caricare i dati dal file csv
+// 2° ENDPOINT GET. Necessario per caricare i dati dal file csv
 app.get('/datacsv', (req, res) => {
     console.log("Carico dati")
     res.type('text/csv').sendFile(__dirname + '/views/DataStrutture.csv');
 })
 
-// 3° END POINT. Necessario per la visualizzazione delle varie pagine
+
+// 3° ENDPOINT GET. Necessario per la visualizzazione delle varie pagine
 app.get('/', (req, res) => {
     res.render('./views/index.html');
 })
 
-app.get('/views/inserisci', (req, res) => {
-    res.render('./views/inserisci.html');
+app.get('/new', (req, res) => {
+    res.render('./views/new.html');
 })
 
-app.get('/views/ricerca', (req, res) => {
+app.get('/ricerca', (req, res) => {
     res.render('./views/ricerca.html');
 })
 
-app.get('/views/rimuovi', (req, res) => {
+app.get('/rimuovi', (req, res) => {
     res.render('./views/rimuovi.html');
 })
 
-app.get('/views/tabella', (req, res) => {
+app.get('/tabella', (req, res) => {
     res.render('./views/tabella.html');
 })
 
@@ -68,50 +63,76 @@ app.get('*', (req, res) => {
     res.render('./views/404.html');
 })
 
-// END POINT per ricerca dati
+/*
+// 4° ENDPOINT GET. Necessario per ricerca e acquisizione dati
 app.get("/DataStrutture/:param", (req, res) => {
   let datiArray = CSVToArray(fileSystem.readFileSync("./views/DataStrutture.csv"));
   console.log(req.params.par);
   // Controllo se han passato un parametro numerico o di tipo stringa.
-  if (isNaN(req.params.par)) { 
-    let data = [];
-    datiArray.forEach(elemento => { // Salvo ogni elemento in cui i comuni combaciano.
-      let splitted = elemento.toString().split(";");
-      if (splitted[3] == req.params.par.toUpperCase())
-        data.push(elemento);
-    });
+  datiArray.forEach(elemento => { // Salvo ogni elemento in cui i comuni combaciano.
+        let elementoOk = elemento.toString().split(";");
+        data.push(elementoOk);}
+  res.status(200).send(datiArray[req.params.param]);
     if (data.length == 0) { // Se l'array è vuoto non abbiamo trovato niente.
       res.status(404).send("Non esistono punti di interesse nel comune richiesto.");
     } else {
-      res.status(200).send(JSON.stringify(data));
-    }
-  } else {
-      if (punti.length > req.params.par && req.params.par > 0) { // Indice 0 riservato per l'header csv.
-        res.status(200).send(punti[req.params.par]);
-      } else {
-        res.status(400).send('Elemento non presente in lista o parametro illegale');
-      }
-  }
+        let struttura = elementoOk.find(
+            (struttura) => struttura.param === param;
+        )
+
+});*/
+
+/* --------------- ENDPOINT: POST -------------- */
+// devo inserire una struttura e definisco il tipo di azione
+// 
+app.post("/inserimento", (req, res) => {
+     
+     // salvo i dati del csv in strutture
+     let strutture = CSVToArray(fs.readFileSync("./views/DataStrutture.csv"));
+     console.log(strutture);
+          
+     // acquisisco i dati
+     let denominazione = req.body.denominazione;
+     let quartiere     = req.body.quartiere;
+     let indirizzo     = req.body.indirizzo;
+     let categoria     = req.body.categoria;
+     let descrizione   = req.body.descrizione;
+     let latitudine    = req.body.latitudine;
+     let longitudine   = req.body.longitudine;
+
+     // creo un array contenente le info relative ad una riga
+    // che dovrà essere inserita nell'array appena creato
+    let nuovaStruttura = '/n' +
+        denominazione + ";" + 
+        quartiere     + ";" +
+        indirizzo     + ";" +
+        categoria     + ";" +
+        descrizione   + ";" +
+        latitudine    + ";" +
+        longitudine;
+  
+     console.log(nuovaStruttura);
+
+     // inserisco la nuova struttura nel file csv
+     strutture.push(nuovaStruttura);
+
+     // appendo il file.
+     fs.writeFileSync("./views/DataStrutture.csv", nuovaStruttura, {flag:'a'});
+     console.log(strutture);
+     res.status(200).send(nuovaStruttura);
+   
 });
 
-// --------------- END POINT: RIMOZIONE --------------
-app.delete("/rimuovi/:nome", (req, res) => {
+/* --------------- ENDPOINT: RIMOZIONE -------------- */
+app.delete("/rimozione/:nome", (req, res) => {
     // definizione del nuovo array nella quale inserire i dati presi dal csv
     let strutture = CSVToArray(fileSystem.readFileSync("./views/DataStrutture.csv"));
-    const {id} = req.params
-    console.log("Rimozione dell'elemento " + id);
-    if (strutture.length >= id && id > 0) {
-        strutture.splice(strutture.length + 1, 1, id);
-      let csv = "";
-      for (let i = 0; i < strutture.length - 1; i++) {
-        csv += String(strutture[i]) + "\n";
+    let nome = req.params.nome;
+    console.log("Rimozione della struttura " + nome);
+    if (strutture.length >= nome && nome > 0) {
+        strutture.splice(strutture.length + 1, 1, nome);
       }
-      csv += String(strutture[strutture.length - 1]);
-      fileSystem.writeFileSync(__dirname + "/views/DataStrutture.csv", csv);
-      res.status(200).send("Elemento eliminato correttamente.");
-    } else {
-      res.status(400).send('Elemento non presente in lista o parametro illegale');
-    }
+      fileSystem.writeFileSync("/views/DataStrutture.csv", nome);
   });
 
 /* FUNZIONI */

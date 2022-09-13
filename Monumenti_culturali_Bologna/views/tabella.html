@@ -54,7 +54,7 @@
     <p style="text-align:center">Qui di seguito troverai tutte le informazioni sui centri culturali presenti a Bologna </p>
 
   <div class="container text-center">
-    <a href="/views/ricerca" class="btn" id="research">Ricerca Struttura</a>
+    <a href="/ricerca" class="btn" id="research">Ricerca Struttura</a>
     <a href="/" class="btn">Torna alla Home Page</a>
   </div>
 
@@ -92,7 +92,7 @@
             const data = await response.text();
 
             // vettore di appoggio dei dati acquisiti
-            const acquisizioneDati = []; // [lat,lon] vettore
+            const coordinate = []; // [lat,lon] vettore
             const rows = data.split("\n"); // Quartiere, Categorie, Denominazione, Descrizione, Indirizzo, Latitudine, Longitudine
             var primaRiga = 0;
             // viene eseguito il parsing del csv
@@ -113,7 +113,7 @@
                   }
                   primaRiga++;
                 });
-                acquisizioneDati.bindPopup(dati);
+                coordinate.bindPopup(dati);
           }
 
     </script>

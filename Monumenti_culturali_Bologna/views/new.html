@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" 
+        rel="stylesheet" 
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" 
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="./public/style.css">
+        <title>Inserimento</title>  
+        
+        <style>
+            #home{
+                background-color: blue;
+                color: whitesmoke;
+                margin-left: 40%;
+                margin-top: 20px;
+            }
+
+            #allData{
+                background-color: rgb(180, 217, 250);
+                color: black;
+                margin-top: 20px;
+            }
+
+        </style>
+</head>
+<body>
+    <h1 style="text-align:center">Centri culturali di Bologna</h1>
+    <h5 style="text-align:center">Inserimento strutture.</h5>
+    <p style="text-align: center; margin-bottom: 40px">Compila i campi sotto riportati per inserire la Struttura mancante!</p>
+
+    <div class="container p-3 my-3 border" style="background-color:aqua;" >
+        <form action="inserimento" method="post"> 
+        
+        <div class="row">
+            <div class="col" style="margin-top:20px">                    
+                <input required
+                    type="text"  
+                    name="denominazione" 
+                    id="denominazione"
+                    placeholder="Denominazione" 
+                    class="form-control" >
+            </div>
+    
+            <div class="col" style="margin-top:20px">   
+                <input required
+                        type="text"  
+                        name="quartiere" 
+                        id="quartiere"
+                        placeholder="Quartiere"  
+                        class="form-control">   
+            </div>
+    
+            <div class="col" style="margin-top:20px">                    
+                <input required
+                    type="text"  
+                    name="indirizzo" 
+                    id="indirizzo"
+                    placeholder="Indirizzo" 
+                    class="form-control"> 
+            </div>     
+        </div>    
+    
+        <div class="row">
+            <div class="col" style="margin-top:20px">
+                <select 
+                        name="categoria" 
+                        id="categoria"
+                        class="form-select"
+                        required >
+    
+                        <option value="gallerie">Gallerie</option>
+                        <option value="musei">Musei</option>
+                        <option value="teatri">Teatri storici</option>
+                </select>
+            </div>
+            
+            <div class="col" style="margin-top:20px">
+                    <input required
+                        type="text"  
+                        name="descrizione" 
+                        id="descrizione"
+                        placeholder="Descrizione"
+                        class="form-control" >
+            </div>
+        </div>    
+    
+        <div class="row" style="margin-bottom: 20px">
+            <div class="col" style="margin-top:20px">
+                <input required
+                        type="number"
+                        name="latitudine"
+                        id="latitudine" 
+                        placeholder="Latitudine" 
+                        step="0.0001"
+                        class="form-control">
+            </div>
+    
+            <div class="col" style="margin-top:20px">
+                <input required
+                        type="number"
+                        name="longitudine"
+                        id="longitudine" 
+                        placeholder="Longitudine" 
+                        step="0.0001"
+                        class="form-control">
+            </div>
+        </div>
+    
+        <div class="row" style=" padding: 0px 0px 0px 600px;">
+            <button class="btn btn-primary" style="width: 100px" type="submit" >Conferma</button>
+        </div>
+        </form>
+    </div>
+    <div class="container text-center">
+        <a href="/tabella" class="btn" id="allData">Vai alla lista completa</a>
+        <a href="/" class="btn" id="home">Torna alla Home Page</a>
+    </div>          
+</body>
+</html>
