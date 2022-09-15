@@ -25,7 +25,7 @@
             box-sizing: border-box;
         }
     
-        form.research input[type=text] {
+        input {
             padding: 10px;
             font-size: 17px;
             border: 1px solid grey;
@@ -34,7 +34,7 @@
             background: #f1f1f1;
         }
     
-        form.research button {
+        #search {
             float: left;
             width: 20%;
             padding: 10px;
@@ -42,22 +42,8 @@
             color: white;
             font-size: 17px;
             border: 1px solid grey;
-            border-left: none;
-            cursor: pointer;
         }
         
-         /*?????????????????????????*/
-        form.research button:hover {
-            background: #0b7dda;
-        }
-        
-        /*?????????????????????????*/
-        form.research::after {
-            content: "";
-            clear: both;
-            display: table;
-        }
-
         .btn{
             background-color: blue;
             color: whitesmoke;
@@ -74,16 +60,16 @@
                 <p> Effettua la ricerca tramite il nome della struttura </p>
             </div>
             <div class="col">
-                <form class="research" style="margin:auto;max-width:300px">
+               <form class="research" action="ricerca" method="get" style="margin:auto;max-width:300px">
                     <input 
                         type="text" 
                         placeholder="Search.." 
-                        name="ricercaNome" 
+                        name="nome" 
                         id="nome">               
-                    <button onclick="cerca(1)">
+                    <button id="search" onclick="cerca(1)">
                         <i class="fa fa-search"></i>
                     </button>
-                </form>
+                </form> 
             </div>
         </div>
 
@@ -98,7 +84,7 @@
                         <option value="musei">Musei</option>
                         <option value="teatri">Teatri storici</option>
                     </select>
-                    <button type="submit" onclick="cerca(2)">
+                    <button onclick="cerca(2)">
                         <i class="fa fa-search"></i>
                     </button>  
                 </form>              
@@ -122,49 +108,71 @@
                 </form>
             </div>
         </div>
-
         <div class="text-center" id="risultato"></div>
-    
     </div>
-    
     <script>
+        
         async function cerca(param) {
-            let table =
-                '<table style="margin-top: 20px">' +  
-                '<thead style="background-color: rgb(86, 86, 244)">' + 
-                    '<tr><th scope="col">Denominazione</th>' +
-                    '<th scope="col">Quartiere</th>' +
-                    '<th scope="col">Indirizzo</th>' +
-                    '<th scope="col">Categoria</th>' +
-                    '<th scope="col">Descrizione</th>' +
-                    '</tr></thead><tbody id="tabellaeventi">';
-      
-            if (param === 1) {
-                let nome = document.getElementById("nome").value;
-                const res = await fetch("/DataStrutture/" + nome);
-                txt = await res.text();
-                if (res.ok) {
-                    // viene restituito un array javascript
-                    let struttura = JSON.parse(txt);
-                    struttura.forEach(elemento => {
-                        params = elemento.toString().split(";");
-                        table += 
-                            '<tr><th scope="row">' + params[0] + "</th>" +
-                            "<td>" + params[1] + "</td>" +
-                            "<td>" + params[2] + "</td>" +
-                            "<td>" + params[3] + "</td>" +
-                            "<td>" + params[4];
-                        });
-                    table += "</td></tbody></table>";                
+          let table =
+           '<table style="margin-top: 20px">' +  
+           '<thead style="background-color: rgb(86, 86, 244)">' + 
+            '<tr><th scope="col">Denominazione</th>' +
+            '<th scope="col">Quartiere</th>' +
+            '<th scope="col">Indirizzo</th>' +
+            '<th scope="col">Categoria</th>' +
+            '<th scope="col">Descrizione</th>' +
+            '</tr></thead><tbody id="tabellaeventi">';
+  
+          if (param == 1) {
+            let nome = document.getElementById("nome").value;
+            // attesa del termine della richiesta
+            const res = await fetch("/dataStrutture/" + nome);
+            // attesa di trasformazione della richiesta in testo
+            txt = await res.text();
+            if (res.ok) {
+                console.log("OK");
+                // trasforma la ricezione dati del webc he arriva sotto forma di stringa 
+                // in un oggetto javascript
+                let strutture = JSON.parse(txt);
+                strutture.forEach(elemento => {
+                    params = elemento.toString().split(",");
+                    table += 
+                        '<tr><th scope="row">' + params[0] + "</th>" +
+                        "<td>" + params[1] + "</td>" +
+                        "<td>" + params[2] + "</td>" +
+                        "<td>" + params[3] + "</td>" +
+                        "<td>" + params[4];
+                    });
+                table += "</td></tbody></table>";                
                 } else {
                     table = "ERRORE: " + txt;
                 }
-            }  
-            document.getElementById("risultato").innerHTML = table;
+            }
         }
     </script>
+    
+    <script src="./views/trovato.html"></script>
+
     <div class="container text-center">
         <a href="/" class="btn" style="margin-top:20px;">Torna alla Home Page</a>
     </div>
 </body>
+
+<script>
+    async function cerca(param){
+        if(param == 3){
+            const categoria = document.getElementById('categoria').value;
+            const result = await fetch('http://localhost:3800/ricercaCategoria' + categoria);
+
+            if(result.ok){
+                console.log(await result.text());
+            } else {
+                alert("NO");
+            }
+        }
+    }
+    // prendo la categoria di quello che ho chiesto
+    strutture[i].categoria;
+</script>
+
 </html>

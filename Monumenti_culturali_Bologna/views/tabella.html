@@ -58,22 +58,27 @@
     <a href="/" class="btn">Torna alla Home Page</a>
   </div>
 
+  <h>Ricerca su colonne (nome, tipo, llocalità</h>
   <div class="container text-center">
+    
+    <input type="text" id="search-Box" placeholder="search..">
+  
     <!-- inserimento Tabella -->
-    <table style="margin-top: 20px">
+    <table id="table" style="margin-top: 20px">
         <colgroup>
-            <col style="background-color: rgb(180, 217, 250)">
+            <col id="col" style="background-color: rgb(180, 217, 250)">
             <col>
             <col style="background-color: rgb(180, 217, 250)">
             <col>
             <col style="background-color: rgb(180, 217, 250)">
+            <row id="row"></row>
         </colgroup>
         <thead style="background-color: rgb(86, 86, 244)">
             <tr>
-                <th scope="col">Denominazione</th>
-                <th scope="col">Quartiere</th>
+                <th scope="col" id="nome">Denominazione</th>
+                <th scope="col" id="quartiere">Quartiere</th>
                 <th scope="col">Indirizzo</th>
-                <th scope="col">Categoria</th>
+                <th scope="col" id="categoria">Categoria</th>
                 <th scope="col">Descrizione</th>
             </tr>        
         </thead>
@@ -93,15 +98,16 @@
 
             // vettore di appoggio dei dati acquisiti
             const coordinate = []; // [lat,lon] vettore
-            const rows = data.split("\n"); // Quartiere, Categorie, Denominazione, Descrizione, Indirizzo, Latitudine, Longitudine
+            const rows = data.split("\n"); // Divisione delle righe del csv
             var primaRiga = 0;
+            var ultimariga = undefined;
             // viene eseguito il parsing del csv
             rows.forEach(row => {
-              const cols = row.split(';'); 
+              const cols = row.split(','); 
               const dati = 
                 cols[0] + "<br>";
 
-                if (primaRiga != 0){
+                if (primaRiga !== 0 && ultimariga === undefined){
                     // popolo la struttura con info 
                     inserimentoInTabella = 
                       "<td>" + cols[0] + "</td>" +
@@ -116,6 +122,42 @@
                 coordinate.bindPopup(dati);
           }
 
+  /*  var searchData = document.getElementById("search-Box");
+
+    
+    // stiamo dicendo che la ricerca (evento) viene generato quando 
+    // viene rilasciata una chiave
+    searchData.addEventListener('keyup', function(){
+        var keyword = this.value;
+        console.log(keyword);
+        keyword = keyword.toUpperCase();
+        // acquisisco la tabella
+        var table = document.getElementById(tabellaDati);
+        // acquisisco tutte le righe
+        var all_tr = table.getElementById(row);
+        // acquisisco il nome di ogni colonna e il testo al suo interno
+        for(var i = 0; i < all_tr.lenght; i++){
+            var name_col = all_tr[i].getElementById(nome)[0];
+            var quartiere_col = all_tr[i].getElementById(quartiere)[1];
+            var categoria_col = all_tr[i].getElementById(categoria)[3];
+            
+            if(name_col && quartiere_col && categoria_col){
+                  var name_value = name_column.textContent || name_column.innerText;
+                  var quartiere_col = email_column.textContent || email_column.innerText;
+                  
+                  var name_value = name_value.toUpperCase();
+                  var quartiere_value = quartiere_value.toUpperCase();
+
+                  if((name_value.indexOf(keyword) > -1) || (quartiere_value.indexOf(keyword) > -1)){
+                    console.log("found");
+                              //all_tr[i].style.display = ""; // show
+                  }else{
+                    //all_tr[i].style.display = "none"; // hide
+                              console.log("not found");
+                  }
+                }
+		}
+    });*/
     </script>
   </div>
 </body>
