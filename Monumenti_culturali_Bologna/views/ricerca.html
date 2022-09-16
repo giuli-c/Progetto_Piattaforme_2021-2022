@@ -60,7 +60,7 @@
                 <p> Effettua la ricerca tramite il nome della struttura </p>
             </div>
             <div class="col">
-               <form class="research" action="ricerca" method="get" style="margin:auto;max-width:300px">
+               <form class="research" style="margin:auto;max-width:300px">
                     <input 
                         type="text" 
                         placeholder="Search.." 
@@ -84,7 +84,7 @@
                         <option value="musei">Musei</option>
                         <option value="teatri">Teatri storici</option>
                     </select>
-                    <button onclick="cerca(2)">
+                    <button id="search" onclick="cerca(2)">
                         <i class="fa fa-search"></i>
                     </button>  
                 </form>              
@@ -102,7 +102,7 @@
                         placeholder="Search.." 
                         name="ricercaQuartiere"  
                         id="quartiere">
-                    <button type="submit" onclick="cerca(3)">
+                    <button id="search" onclick="cerca(3)">
                         <i class="fa fa-search"></i>
                     </button>
                 </form>
@@ -110,6 +110,7 @@
         </div>
         <div class="text-center" id="risultato"></div>
     </div>
+    <!---
     <script>
         
         async function cerca(param) {
@@ -151,28 +152,88 @@
         }
     </script>
     
-    <script src="./views/trovato.html"></script>
+    <script src="./views/trovato.html"></script> -->
 
     <div class="container text-center">
         <a href="/" class="btn" style="margin-top:20px;">Torna alla Home Page</a>
     </div>
+
+    <div class="container text-center" id="elemento"></div>
+
 </body>
 
 <script>
-    async function cerca(param){
-        if(param == 3){
-            const categoria = document.getElementById('categoria').value;
-            const result = await fetch('http://localhost:3800/ricercaCategoria' + categoria);
+    /*const element = document.getElementById("search");
+    element.addEventListener("click", cerca(param));*/
 
-            if(result.ok){
-                console.log(await result.text());
+    async function cerca(param){
+        if(param == 1){
+            // acquisisco parametro
+            const nome = document.getElementById("Denominazione").value;
+            
+            // attendo il risultato dell'acquizione
+            const response = await fetch('/ricercaNome');
+
+            /*
+            // GET response e mostro il risultato
+            if(response.ok){
+                const strutture = await response.json();
+
+                let table = 
+                    'Denominazione: ' +  strutture.Denominazione + '<br>' +
+                    'Quartiere: ' + strutture.Quartiere + '<br>' + 
+                    'Indirizzo: ' + strutture.Indirizzo + '<br>' + 
+                    'Descrizione: ' + strutture.Descrizione;
+                
+                document.getElementById('elemento').innerHTML = table;
             } else {
-                alert("NO");
-            }
+                document.getElementById('elemento').innerHTML = 'ERRORE! Struttura inesistente con il nome specificato"'
+            }*/          
+        }
+
+        if(param == 2){
+             // acquisisco parametro
+             const quartiere = document.getElementById("Quartiere").value;
+            
+            // attendo il risultato dell'acquizione
+            const response = await fetch('/ricerca' + quartiere);
+
+            // GET response e mostro il risultato
+            if(response.ok){
+                const strutture = await response.json();
+
+                let table = 
+                    'Denominazione: ' +  strutture.Denominazione + '<br>' +
+                    'Quartiere: ' + strutture.Quartiere + '<br>' + 
+                    'Indirizzo: ' + strutture.Indirizzo + '<br>' + 
+                    'Descrizione: ' + strutture.Descrizione;
+                
+                document.getElementById('elemento').innerHTML = table;
+            } else {
+                document.getElementById('elemento').innerHTML = 'ERRORE! Struttura inesistente nella zona selezionata'
+            }          
+        }
+        
+        if(param == 3){
+            // acquisisco parametro
+            const tipo = document.getElementById("Denominazione").value;
+            
+            // attendo il risultato dell'acquizione
+            const response = await fetch('/ricerca' + tipo);
+
+            // GET response e mostro il risultato
+            if(response.ok){
+                const strutture = await response.json();
+
+                let table = 
+                    'Denominazione: ' +  strutture.Denominazione + '<br>' +
+                    'Quartiere: ' + strutture.Quartiere + '<br>' + 
+                    'Indirizzo: ' + strutture.Indirizzo + '<br>' + 
+                    'Descrizione: ' + strutture.Descrizione;
+                
+                document.getElementById('elemento').innerHTML = table;
+            }        
         }
     }
-    // prendo la categoria di quello che ho chiesto
-    strutture[i].categoria;
 </script>
-
 </html>

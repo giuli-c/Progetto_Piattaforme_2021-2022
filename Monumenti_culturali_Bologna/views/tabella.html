@@ -75,10 +75,10 @@
         </colgroup>
         <thead style="background-color: rgb(86, 86, 244)">
             <tr>
-                <th scope="col" id="nome">Denominazione</th>
-                <th scope="col" id="quartiere">Quartiere</th>
+                <th scope="col">Denominazione</th>
+                <th scope="col">Quartiere</th>
                 <th scope="col">Indirizzo</th>
-                <th scope="col" id="categoria">Categoria</th>
+                <th scope="col">Categoria</th>
                 <th scope="col">Descrizione</th>
             </tr>        
         </thead>
@@ -92,34 +92,23 @@
 
         // chiamata http al sever dove vengono chiesti tutti i dati csv
         async function inserimentoDati() {
-            // acquisizione dei dati
-            const response = await fetch("/datacsv");
-            const data = await response.text();
+            // attendo la risposta della chiamata di recupero dei dati
+            const response = await fetch("/dataStrutture");
+            // procedi solo una volta che la promessa è stata risolta
+            const strutture = await response.json();
+            console.log("dati acquisiti")            
 
-            // vettore di appoggio dei dati acquisiti
-            const coordinate = []; // [lat,lon] vettore
-            const rows = data.split("\n"); // Divisione delle righe del csv
-            var primaRiga = 0;
-            var ultimariga = undefined;
-            // viene eseguito il parsing del csv
-            rows.forEach(row => {
-              const cols = row.split(','); 
-              const dati = 
-                cols[0] + "<br>";
-
-                if (primaRiga !== 0 && ultimariga === undefined){
-                    // popolo la struttura con info 
-                    inserimentoInTabella = 
-                      "<td>" + cols[0] + "</td>" +
-                      "<td>" + cols[1] + "</td>" +
-                      "<td>" + cols[2] + "</td>" +                
-                      "<td>" + cols[3] + "</td>" +
-                      "<td>" + cols[4] + "</td>";
-                    document.getElementById("tabellaDati").innerHTML += inserimentoInTabella;
-                  }
-                  primaRiga++;
-                });
-                coordinate.bindPopup(dati);
+            for(let i = 0; i < strutture.length; i++){
+              inserimentoInTabella =
+                  '<tr class="fw-lighter"><th scope="row">' + 
+                           JSON.stringify(strutture[i].Denominazione) + '</th>' +
+                  '<td>' + JSON.stringify(strutture[i].Quartiere) + '</td>' + 
+                  '<td>' + JSON.stringify(strutture[i].Indirizzo) + '</td>' +
+                  '<td>' + JSON.stringify(strutture[i].Categoria) + '</td>' +
+                  '<td>' + JSON.stringify(strutture[i].Descrizione) + '</td>';
+                
+                  document.getElementById("tabellaDati").innerHTML += inserimentoInTabella;
+            }
           }
 
   /*  var searchData = document.getElementById("search-Box");

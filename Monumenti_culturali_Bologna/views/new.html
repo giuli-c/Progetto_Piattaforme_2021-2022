@@ -110,7 +110,7 @@
             </div>
         
             <div class="row" style=" padding: 0px 0px 0px 600px;">
-                <button class="btn btn-primary" id="add" style="width: 100px">Conferma</button>
+                <button class="btn btn-primary" id="addBtn" style="width: 100px">Conferma</button>
             </div>
         
     </div>
@@ -121,17 +121,49 @@
 </body>
 
 <script>
+    const element = document.getElementById("addBtn");
+    element.addEventListener("click", newStructur);
+
     async function newStructur(){
         const denominazione = document.getElementById("denominazione").value;
         const quartiere     = document.getElementById("quartiere").value;
         const indirizzo     = document.getElementById("indirizzo").value;
         const categoria     = document.getElementById("categoria").value;
         const descrizione   = document.getElementById("descrizione").value;
-        const latitudine   = document.getElementById("latitudine").value;
+        const latitudine    = document.getElementById("latitudine").value;
         const longitudine   = document.getElementById("longitudine").value;
 
+        // dati da inviare grazie all'endPoint POST
+        let data = { Denominazione: denominazione,
+                     Quartiere: quartiere, 
+                     Indirizzo: indirizzo,
+                     Categoria: categoria,
+                     Descrizione: descrizione,
+                     Latitudine: latitudine,
+                     Longitudine: longitudine,
+                    };
         
+        // se i campi necessari sono stati inseriti
+        if(denominazione != "" && quartiere != "" && indirizzo != "" && 
+           latitudine != "" && longitudine != ""){
+            // richiamo dell'end point POST
+            const response = 
+                    await fetch('/inserimento', {
+                                                    method: 'POST',
+                                                    headers: {
+                                                                Accept: 'application/json',                                              
+                                                                        'Content-Type': 'application/json',
+                                                             },
+                                                    body: JSON.stringify(data),
+                                                })
+            /*//POST response
+            if(response.ok) {
+                window.location = 'success';
+            } else {
+                window.location = 'error';
+            }*/
+        }
     }
+    
 </script>
-
 </html>
