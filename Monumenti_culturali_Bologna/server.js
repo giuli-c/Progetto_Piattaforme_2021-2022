@@ -53,7 +53,7 @@ app.get('/new', (req, res) => {
 })
 
 app.get('/ricerca', (req, res) => {
-    res.render('./views/ricerca.html');
+    res.render('./views/cerca.html');
 })
 
 app.get('/rimuovi', (req, res) => {
@@ -76,17 +76,29 @@ app.get('*', (req, res) => {
 
 
 // 4° ENDPOINT GET. Necessario per ricerca e acquisizione dati
-app.get("/ricercaNome", (req, res) => {      
-        // se esiste un elemento in cui la denominazione è uguale a nome, creo dati
-        if(strutture.includes(d => d.Denominazione === req.query.nome)){   
+app.get("/ricerca", (req, res) => {   
+    // acquisisisco i dati
+    let nome = req.body.Denominazione;
+    let trovaStruttura = strutture.find(s => s.Denominazione === nome);
+    console.log("trovata struttura " + trovaStruttura);
+    res.status(200).send("strutturaTrovata");
+/*
+    // acquisiszione dei dati
+    let nome = req.params.param;
+    console.log("Trovata struttura" + nome);
+    res.send();*/
+
+    /*
+    if(nome != ""){
             const dati = 
-                strutture.find(d => d.Denominazione === req.query.nome);     
-            // richiesta andata a buon fine, restituisco l'elemento 
-            res.render("./views/risultatoRicerca.html").send(dati);
+                strutture.find(d => d.Denominazione === nome);     
+            // richiesta andata a buon fine, restituisco l'elemento
+            console.log("Trovata struttura" + nome) 
+            res.render("./views/risultatoRicerca.html");
         } else {
             // richiesta non andata a buon fine
             res.render('./views/404.html');
-        }
+        }    */
 });
 
 app.get("/ricercaQuartiere", (req, res) => {
@@ -143,18 +155,15 @@ app.post("/inserimento", (req, res) => {
 app.delete("/rimuovi", (req, res) => {
     // acquisisisco i dati
     let nome = req.body.Denominazione;
-    if(nome != ""){
-        let eliminaStruttura = strutture.find(s => s.Denominazione === nome);
-        console.log("Rimozione della struttura " + nome);
-        strutture.splice(strutture.indexOf(eliminaStruttura), 1);
+    
+    let eliminaStruttura = strutture.find(s => s.Denominazione === nome);
+    console.log("Rimozione della struttura " + nome);
         
-        fs.writeFileSync("strutture.json", JSON.stringify(strutture));
-        res.status(200).send("Elemento eliminato correttamente!");
-    }else{
-        res.sendStatus(404);
-    }
+    strutture.splice((strutture.indexOf(eliminaStruttura)), 1);
+        
+    fs.writeFileSync("strutture.json", JSON.stringify(strutture));
+    res.status(200).send("Elemento eliminato correttamente!");
+    if(!eliminaStruttura){
+        res.status(404).send("Struttura non trovata!")
+    }    
   });
-
-/* FUNZIONI */
-// Funzione per convertire da CSV ad array.
-/* Preso da https://gist.github.com/luishdez/644215 */

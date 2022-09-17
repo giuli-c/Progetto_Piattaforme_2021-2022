@@ -23,8 +23,8 @@
             margin-bottom: 10px;
         }
     </style>
-
 </head>
+
 <body>
     <div class="container p-3 text-center" style="background-color: rgb(155, 196, 233);">
             <div class="row" id="colonnaNome">
@@ -41,11 +41,12 @@
                         <i class="fa fa-trash-o fa-lg"></i> Elimina</button>
                 </div>
             </div>
-            <div class="row" id = "risultato"></div> 
     </div>
     <div class="container text-center">
         <a href="/" class="btn" id="homePage" style="margin-top:20px;">Torna alla Home Page</a>
+        <div class="container" id="Rimozione"></div>
     </div>
+    
 
     <script>
         const element = document.getElementById("remove");
@@ -70,27 +71,39 @@
                                                  },
                                         body: JSON.stringify(data)                                                            
                                     });
-                /*//POST response
-            if(response.ok) {
-                window.location = 'success';
-            } else {
-                window.location = 'error';
-            }*/
+                
+                    if(response.ok) {
+         
+                        document.getElementById("Rimozione").innerHTML =  
+                                                                '<h4> L elemento che hai deciso di rimuovere è:</h4>' +        
+                                                                '<table id="table" style="margin-top: 20px">'+
+                                                                    '<thead style="background-color: rgb(86, 86, 244)">' +
+                                                                        '<tr><th scope="col"> Denominazione: </th>' +
+                                                                            '<th scope="col"> Quartiere </th>' +
+                                                                            '<th scope="col"> Indirizzo </th>' +
+                                                                            '<th scope="col"> Categoria </th>' +
+                                                                            '<th scope="col"> Descrizione </th></tr>'
+                                                                    '</thead>'+
+                                                                    '<tbody id="tabellaDati"></tbody></table>';
+                                                                    
+                                                                    const struttura = await response.json();     
+
+                                                                    for(let i = 0; i < struttura.length; i++){
+                                                                    inserimentoInTabella =
+                                                                            '<tr class="fw-lighter"><th scope="row">' + 
+                                                                                    JSON.stringify(struttura[i].Denominazione) + '</th>' +
+                                                                            '<td>' + JSON.stringify(struttura[i].Quartiere) + '</td>' + 
+                                                                            '<td>' + JSON.stringify(struttura[i].Indirizzo) + '</td>' +
+                                                                            '<td>' + JSON.stringify(struttura[i].Categoria) + '</td>' +
+                                                                            '<td>' + JSON.stringify(struttura[i].Descrizione) + '</td>';
+                                                                            
+                                                                    document.getElementById("tabellaDati").innerHTML += inserimentoInTabella;
+                                                                   }
+                                                                }
+          }else{
+                alert("ATTENZIONE! Non è stato possibile rimuovere alcuna struttura..")
             }
         }
     </script>
-            
-            
-            
-            <!---
-            const response = await fetch('/rimuovi' + nome, {method: 'DELETE'});
-            if(response.ok){
-                console.log("ELEMENTO RIMOSSO!");
-                document.getElementById("risultato").innerHTML = 'Elemento rimosso';
-            }else{
-                document.getElementById("risultato").innerHTML = "ERRORE! " + txt;
-            }
-        } -->
-    
 </body>
 </html>
