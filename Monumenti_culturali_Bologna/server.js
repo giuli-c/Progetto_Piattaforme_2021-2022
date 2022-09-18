@@ -74,14 +74,18 @@ app.get('*', (req, res) => {
     res.render('./views/404.html');
 })
 
-
 // 4° ENDPOINT GET. Necessario per ricerca e acquisizione dati
-app.get("/ricerca", (req, res) => {   
+app.get("/cercaNome", (req, res) => {   
     // acquisisisco i dati
     let nome = req.body.Denominazione;
     let trovaStruttura = strutture.find(s => s.Denominazione === nome);
-    console.log("trovata struttura " + trovaStruttura);
-    res.status(200).send("strutturaTrovata");
+    if(trovaStruttura){
+        console.log("Trovata struttura " + nome);
+        res.status(200).send("Trovata struttura");
+    }else{
+        res.status(404).send("Struttura non trovata!")
+        console.log("struttura INESISTENTE");
+    }
 /*
     // acquisiszione dei dati
     let nome = req.params.param;

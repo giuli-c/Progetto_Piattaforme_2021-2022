@@ -53,6 +53,16 @@
         element.addEventListener("click", removeStructure);
 
         async function removeStructure() {
+
+            let table = '<table id="table" style="margin-top: 20px">'+
+                        '<thead style="background-color: rgb(86, 86, 244)">' +
+                        '<tr><th scope="col"> Denominazione: </th>' +
+                        '<th scope="col"> Quartiere </th>' +
+                        '<th scope="col"> Indirizzo </th>' +
+                        '<th scope="col"> Categoria </th>' +
+                        '<th scope="col"> Descrizione </th></tr>' +
+                        '</thead><tbody id="tabellaDati">';
+
             const nome = document.getElementById("nome").value;
             
             // dati da inviare grazie all'endPoint DELETE
@@ -71,36 +81,25 @@
                                                  },
                                         body: JSON.stringify(data)                                                            
                                     });
+                const strutture = await response.json();
                 
-                    if(response.ok) {
-         
-                        document.getElementById("Rimozione").innerHTML =  
-                                                                '<h4> L elemento che hai deciso di rimuovere è:</h4>' +        
-                                                                '<table id="table" style="margin-top: 20px">'+
-                                                                    '<thead style="background-color: rgb(86, 86, 244)">' +
-                                                                        '<tr><th scope="col"> Denominazione: </th>' +
-                                                                            '<th scope="col"> Quartiere </th>' +
-                                                                            '<th scope="col"> Indirizzo </th>' +
-                                                                            '<th scope="col"> Categoria </th>' +
-                                                                            '<th scope="col"> Descrizione </th></tr>'
-                                                                    '</thead>'+
-                                                                    '<tbody id="tabellaDati"></tbody></table>';
-                                                                    
-                                                                    const struttura = await response.json();     
+                if(response.ok) {         
+                    // procedi solo una volta che la promessa è stata risolta
+                    console.log("dati acquisiti")            
 
-                                                                    for(let i = 0; i < struttura.length; i++){
-                                                                    inserimentoInTabella =
-                                                                            '<tr class="fw-lighter"><th scope="row">' + 
-                                                                                    JSON.stringify(struttura[i].Denominazione) + '</th>' +
-                                                                            '<td>' + JSON.stringify(struttura[i].Quartiere) + '</td>' + 
-                                                                            '<td>' + JSON.stringify(struttura[i].Indirizzo) + '</td>' +
-                                                                            '<td>' + JSON.stringify(struttura[i].Categoria) + '</td>' +
-                                                                            '<td>' + JSON.stringify(struttura[i].Descrizione) + '</td>';
-                                                                            
-                                                                    document.getElementById("tabellaDati").innerHTML += inserimentoInTabella;
-                                                                   }
-                                                                }
-          }else{
+                    for(let i = 0; i < strutture.length; i++){
+                        table +=
+                                '<tr class="fw-lighter"><th scope="row">' + 
+                                        JSON.stringify(strutture[i].Denominazione) + '</th>' +
+                                '<td>' + JSON.stringify(strutture[i].Quartiere) + '</td>' + 
+                                '<td>' + JSON.stringify(strutture[i].Indirizzo) + '</td>' +
+                                '<td>' + JSON.stringify(strutture[i].Categoria) + '</td>' +
+                                '<td>' + JSON.stringify(strutture[i].Descrizione) + '</td>';
+                    }
+                    table += "</td></tbody></table>";
+                    document.getElementById("Rimozione").innerHTML = '<h4> L elemento che hai deciso di rimuovere è:  </h4>';
+                }                    
+            }else{
                 alert("ATTENZIONE! Non è stato possibile rimuovere alcuna struttura..")
             }
         }

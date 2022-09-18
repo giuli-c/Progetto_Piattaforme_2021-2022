@@ -15,9 +15,17 @@
     <h1 style="text-align:center">Centri culturali di Bologna</h1>
     <p style="text-align:center"> Rimuovi la struttura che è stata chiusa! </p>
 
+    <style>
+        #homePage{
+          background-color: blue;
+          color: whitesmoke;
+          margin-top:40px;
+          margin-bottom: 10px;
+      }
+  </style>
+
 </head>
 <body>
-    <body>
         <div class="container p-3 text-center" style="background-color: rgb(155, 196, 233);">
                 <div class="row" id="colonnaNome">
                     <div class="col">
@@ -33,11 +41,12 @@
                             cerca</button>
                     </div>
                 </div>
-                <div class="row" id = "risultato"></div> 
         </div>
         <div class="container text-center">
             <a href="/" class="btn" id="homePage" style="margin-top:20px;">Torna alla Home Page</a>
         </div>
+
+        <div class="container text-center" id = "risultato"></div> 
     
         <script> 
         
@@ -53,17 +62,29 @@
                             };
 
                 if(nome != ""){
-                    const response = await fetch('/ricerca')   
+                    const response =  await fetch('/cercaNome?Denominazione=' + nome , {
+                                        method: 'GET',
+                                                                                                  
+                                    });
+         
                     if(response.ok) {
-                        document.getElementById("risultato").innerHTML =  "Elemento trovato con successo";
+                        const struttura = await response.json();
+
+                        let table = 'Nome: ' +  struttura.Denominazione + '<br>' +
+                                'Quartiere: ' + struttura.Quartiere + '<br>' + 
+                                'Indirizzo: ' + struttura.Indirizzo + '<br>' + 
+                                'Categoria: ' + struttura.Categoria;
+
+                        document.getElementById('risultato').innerHTML = table;
+                        document.getElementById("risultato").innerHTML =  "Elemento trovato";
                     } else {
-                        document.getElementById("risultato").innerHTML =  "Elemento inesistente";
+                        console.log("non esiste questa struttura")
+                        document.getElementById("risultato").innerHTML =  "Elemento INESISTENTE";
                     } 
                 }else{
                     alert("ATTENZIONE! Campo vuoto.")
                 }             
-            }
-              
+            }              
         </script>
 </body>
 </html>
