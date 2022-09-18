@@ -77,7 +77,7 @@ app.get('*', (req, res) => {
 // 4° ENDPOINT GET. Necessario per ricerca e acquisizione dati
 app.get("/cercaNome", (req, res) => {   
     // acquisisisco i dati
-    let nome = req.body.Denominazione;
+    let nome = req.query.Denominazione;
     let trovaStruttura = strutture.find(s => s.Denominazione === nome);
     if(trovaStruttura){
         console.log("Trovata struttura " + nome);

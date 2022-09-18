@@ -62,10 +62,8 @@
                             };
 
                 if(nome != ""){
-                    const response =  await fetch('/cercaNome?Denominazione=' + nome , {
-                                        method: 'GET',
-                                                                                                  
-                                    });
+                    const response =  await fetch('/cercaNome?' + new URLSearchParams({Denominazione: nome})                                                         
+                                    );
          
                     if(response.ok) {
                         const struttura = await response.json();
