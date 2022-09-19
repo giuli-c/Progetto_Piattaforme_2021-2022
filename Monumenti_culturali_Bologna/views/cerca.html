@@ -9,19 +9,19 @@
         crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="./public/style.css">
 
-    <title>Rimuovi</title>
+    <title> Ricerca </title>
     <h1 style="text-align:center">Centri culturali di Bologna</h1>
-    <p style="text-align:center"> Rimuovi la struttura che è stata chiusa! </p>
-
+    <p style="text-align:center"> Ricerca la struttura di tuo interesse! </p>
+    
     <style>
         #homePage{
           background-color: blue;
           color: whitesmoke;
           margin-top:40px;
           margin-bottom: 10px;
-      }
+        }
+        
   </style>
 
 </head>
@@ -54,30 +54,38 @@
             element.addEventListener("click", researchStructure);
             
             async function researchStructure() {
+
+                let table = '<table id="table" style="margin-top: 20px">'+
+                        '<thead style="background-color: rgb(86, 86, 244)">' +
+                        '<tr><th scope="col"> Denominazione: </th>' +
+                        '<th scope="col"> Quartiere </th>' +
+                        '<th scope="col"> Indirizzo </th>' +
+                        '<th scope="col"> Categoria </th>' +
+                        '<th scope="col"> Descrizione </th></tr>' +
+                        '</thead><tbody id="tabellaDati">';
+
                 const nome = document.getElementById("nome").value;
-            
-                //Data to be sent via query
-                let data = { 
-                                Denominazione: nome
-                            };
 
                 if(nome != ""){
-                    const response =  await fetch('/cercaNome?' + new URLSearchParams({Denominazione: nome})                                                         
-                                    );
+                    const response =  await fetch('/cercaNome?' + new URLSearchParams({Denominazione: nome}));
+                    console.log(response);
          
                     if(response.ok) {
                         const struttura = await response.json();
 
-                        let table = 'Nome: ' +  struttura.Denominazione + '<br>' +
-                                'Quartiere: ' + struttura.Quartiere + '<br>' + 
-                                'Indirizzo: ' + struttura.Indirizzo + '<br>' + 
-                                'Categoria: ' + struttura.Categoria;
-
-                        document.getElementById('risultato').innerHTML = table;
-                        document.getElementById("risultato").innerHTML =  "Elemento trovato";
+                        table +=
+                                '<tr class="fw-lighter"><th scope="row">' + 
+                                        JSON.stringify(struttura.Denominazione) + '</th>' +
+                                '<td>' + JSON.stringify(struttura.Quartiere) + '</td>' + 
+                                '<td>' + JSON.stringify(struttura.Indirizzo) + '</td>' +
+                                '<td>' + JSON.stringify(struttura.Categoria) + '</td>' +
+                                '<td>' + JSON.stringify(struttura.Descrizione) + '</td>';
+                    
+                    table += "</td></tbody></table>";
+                        document.getElementById('risultato').innerHTML = "Elemento trovato: <br>" + table; 
                     } else {
                         console.log("non esiste questa struttura")
-                        document.getElementById("risultato").innerHTML =  "Elemento INESISTENTE";
+                        document.getElementById("risultato").innerHTML =  "Struttura insesistente INESISTENTE";
                     } 
                 }else{
                     alert("ATTENZIONE! Campo vuoto.")

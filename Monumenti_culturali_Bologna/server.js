@@ -7,19 +7,13 @@ const CSVtoJSON = require('csvtojson')
 
 /***************************** conversione del file da csv a json *****************************/
 const csvfilepath = "views/DataStrutture.csv"
+let strutture;
 
-CSVtoJSON()
-    .fromFile(csvfilepath);
-    //.then((json)
-    // => {}
-
-    // scrittura del file json
-    //  fs.writeFileSync("strutture.json", JSON.stringify(json)
-    //);
-//);
-
-// lettura del file Json
-let strutture = JSON.parse(fs.readFileSync("strutture.json"));
+// trasformazione del file CSV in json
+CSVtoJSON().fromFile(csvfilepath).then((json) => {
+        // strutture diventa l'oggetto Json;
+        strutture = json;
+    });
 
 /******************************* SETTAGGI PRINCIPALI *******************************/
 // Inizializzazione tramite express.
@@ -70,9 +64,6 @@ app.get('/dataStrutture', (req, res) => {
     res.send(strutture);
 });
 
-app.get('*', (req, res) => {
-    res.render('./views/404.html');
-})
 
 // 4° ENDPOINT GET. Necessario per ricerca e acquisizione dati
 app.get("/cercaNome", (req, res) => {   
@@ -80,12 +71,13 @@ app.get("/cercaNome", (req, res) => {
     let nome = req.query.Denominazione;
     let trovaStruttura = strutture.find(s => s.Denominazione === nome);
     if(trovaStruttura){
-        console.log("Trovata struttura " + nome);
-        res.status(200).send("Trovata struttura");
+        console.log("Trovata struttura: " + trovaStruttura);
+        res.status(200).send(trovaStruttura);
     }else{
         res.status(404).send("Struttura non trovata!")
         console.log("struttura INESISTENTE");
     }
+});
 /*
     // acquisiszione dei dati
     let nome = req.params.param;
@@ -103,15 +95,26 @@ app.get("/cercaNome", (req, res) => {
             // richiesta non andata a buon fine
             res.render('./views/404.html');
         }    */
-});
+//});
+/*
+app.get("/cercaNome/:param", (req, res) => {
 
-app.get("/ricercaQuartiere", (req, res) => {
+    console.log(req.params.param);
+
+     // acquisisco i dati
+     let nome = req.body.Denominazione;
+     let quartiere     = req.body.Quartiere;
+     let tipo          = req.body.Categoria;
+
     if(strutture.includes(param)){   
         let dati = 
-            strutture.find(d => d.Quartiere === req.query.quartiere);     
+                strutture.find(s => s.Denominazione === nome ||
+                                    s.Quartiere === quartiere ||
+                                    s.Categoria === tipo);  
         // richiesta andata a buon fine
         // dalle strutture viene preso l'elemento 
-        res.status(200).send(strutture[strutture.indexOf(dati)]);
+        res.status(200).send(dati);
+        res.render("./views/RisultatoRicerca.html");
     } else {
         // richiesta non andata a buon fine
         res.sendStatus(404);
@@ -129,7 +132,7 @@ app.get("/ricercaTipo", (req, res) => {
         // richiesta non andata a buon fine
         res.sendStatus(404);
     }
-})
+})*/
 
 /* --------------- ENDPOINT: POST -------------- */
 // devo inserire una struttura e definisco il tipo di azione
@@ -150,7 +153,7 @@ app.post("/inserimento", (req, res) => {
             // inserisco gli elementi nel file letto
             strutture.push(req.body);
             // aggiungo elementi al file
-            fs.writeFileSync("strutture.json", JSON.stringify(strutture));        
+            //strutture = JSON.parse(inserimentoStruttura)        
             res.status(200);
     }   
 });
@@ -165,9 +168,9 @@ app.delete("/rimuovi", (req, res) => {
         
     strutture.splice((strutture.indexOf(eliminaStruttura)), 1);
         
-    fs.writeFileSync("strutture.json", JSON.stringify(strutture));
+    fs.writeFileSync("strutture.json");
     res.status(200).send("Elemento eliminato correttamente!");
     if(!eliminaStruttura){
         res.status(404).send("Struttura non trovata!")
     }    
-  });
+  })
