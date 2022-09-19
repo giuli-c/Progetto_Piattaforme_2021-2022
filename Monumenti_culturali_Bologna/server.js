@@ -63,7 +63,6 @@ app.get('/dataStrutture', (req, res) => {
     res.send(strutture);
 });
 
-
 // 3° ENDPOINT GET. Necessario per ricerca delle strutture
 app.get("/cercaNome", (req, res) => {   
     // acquisisisco i dati
@@ -73,34 +72,39 @@ app.get("/cercaNome", (req, res) => {
         console.log("Trovata struttura: " + nome);
         res.status(200).send(trovaStrutturaNome);
     }else{
-        res.status(404).send("Struttura non trovata!")
-        console.log("struttura INESISTENTE");
+        res.status(404).send("Struttura non trovata!");
     }
 });
 
 app.get("/cercaTipo", (req, res) => {
     // acquisisco dati
-    let tipo = req.query.Categoria.toUpperCase;
-    let trovaStrutturaTipo = strutture.find(s => s.Categoria === tipo);
-    if(trovaStrutturaTipo){
-        console.log("Le strutture che fanno parte della categoria " + tipo + "sono: ");
-        res.status(200).send(trovaStrutturaTipo);
+    let tipo = req.query.Categoria;
+    let dati = [];
+    for(let element of strutture){
+        if(element.Categoria === tipo){
+            dati.push(element);
+        }
+    }    
+    if(dati){
+        res.status(200).send(dati);
     }else{
         res.status(404).send("Struttura non trovata!")
-        console.log("struttura INESISTENTE");
     }
 });
 
 app.get("/cercaQuartiere", (req, res) => {
     // acquisisco dati
     let quartiere = req.query.Quartiere;
-    let trovaStrutturaQuart = [strutture.find(s => s.Quartiere === quartiere)];
-    if(trovaStrutturaQuart){
-        console.log("Le strutture che fanno parte del quartiere " + quartiere + "sono: ");
-        res.status(200).send(trovaStrutturaQuart);
+    let dati = [];
+    for(let element of strutture){
+        if(element.Quartiere === quartiere){
+            dati.push(element);
+        }
+    }    
+    if(dati){
+        res.status(200).send(dati);
     }else{
         res.status(404).send("Struttura non trovata!")
-        console.log("struttura INESISTENTE");
     }
 });
 
@@ -108,33 +112,6 @@ app.get("/cercaQuartiere", (req, res) => {
 app.get('*', (req, res) => {
     res.render('./views/404.html');
 })
-
-/*
-app.get("/cercaNome/:param", (req, res) => {
-
-    console.log(req.params.param);
-
-     // acquisisco i dati
-     let nome = req.body.Denominazione;
-     let quartiere     = req.body.Quartiere;
-     let tipo          = req.body.Categoria;
-
-    if(strutture.includes(param)){   
-        let dati = 
-                strutture.find(s => s.Denominazione === nome ||
-                                    s.Quartiere === quartiere ||
-                                    s.Categoria === tipo);  
-        // richiesta andata a buon fine
-        // dalle strutture viene preso l'elemento 
-        res.status(200).send(dati);
-        res.render("./views/RisultatoRicerca.html");
-    } else {
-        // richiesta non andata a buon fine
-        res.sendStatus(404);
-    }
-})
-
-*/
 
 /******************************* ENDPOINT: POST *******************************/
 // devo inserire una struttura e definisco il tipo di azione
