@@ -87,17 +87,15 @@
                     // procedi solo una volta che la promessa è stata risolta
                     console.log("dati acquisiti")            
 
-                    for(let i = 0; i < strutture.length; i++){
                         table +=
                                 '<tr class="fw-lighter"><th scope="row">' + 
-                                        JSON.stringify(strutture[i].Denominazione) + '</th>' +
-                                '<td>' + JSON.stringify(strutture[i].Quartiere) + '</td>' + 
-                                '<td>' + JSON.stringify(strutture[i].Indirizzo) + '</td>' +
-                                '<td>' + JSON.stringify(strutture[i].Categoria) + '</td>' +
-                                '<td>' + JSON.stringify(strutture[i].Descrizione) + '</td>';
-                    }
+                                        JSON.stringify(strutture.Denominazione) + '</th>' +
+                                '<td>' + JSON.stringify(strutture.Quartiere) + '</td>' + 
+                                '<td>' + JSON.stringify(strutture.Indirizzo) + '</td>' +
+                                '<td>' + JSON.stringify(strutture.Categoria) + '</td>' +
+                                '<td>' + JSON.stringify(strutture.Descrizione) + '</td>';
                     table += "</td></tbody></table>";
-                    document.getElementById("Rimozione").innerHTML = '<h4> L elemento che hai deciso di rimuovere è:  </h4>';
+                    document.getElementById("Rimozione").innerHTML = '<h4><i> L elemento rimosso è:  </i></h4>' + table;
                 }                    
             }else{
                 alert("ATTENZIONE! Non è stato possibile rimuovere alcuna struttura..")

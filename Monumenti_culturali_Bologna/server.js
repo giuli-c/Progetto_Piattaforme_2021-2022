@@ -27,8 +27,7 @@ app.use(express.urlencoded({extended: true}));  // per fare leggere i dati dal f
 // definizione del motore di ricerca html
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
-// definizione di view come cartella principle
-app.set('views', __dirname);
+app.set('views', __dirname);                    // definizione di view come cartella principle
 
 //settaggio della porta del localhost
 app.set('port', process.env.PORT || 3800);
@@ -58,44 +57,58 @@ app.get('/tabella', (req, res) => {
     res.render('./views/tabella.html');
 })
 
-//  ENDPOINT GET. per acquisire i dati dal file json
+// 2° ENDPOINT GET. Necessario per caricare i dati dal file Json nascosto
 app.get('/dataStrutture', (req, res) => {
     console.log("Caricamento dati...")
     res.send(strutture);
 });
 
 
-// 4° ENDPOINT GET. Necessario per ricerca e acquisizione dati
+// 3° ENDPOINT GET. Necessario per ricerca delle strutture
 app.get("/cercaNome", (req, res) => {   
     // acquisisisco i dati
     let nome = req.query.Denominazione;
-    let trovaStruttura = strutture.find(s => s.Denominazione === nome);
-    if(trovaStruttura){
-        console.log("Trovata struttura: " + trovaStruttura);
-        res.status(200).send(trovaStruttura);
+    let trovaStrutturaNome = strutture.find(s => s.Denominazione === nome);
+    if(trovaStrutturaNome){
+        console.log("Trovata struttura: " + nome);
+        res.status(200).send(trovaStrutturaNome);
     }else{
         res.status(404).send("Struttura non trovata!")
         console.log("struttura INESISTENTE");
     }
 });
-/*
-    // acquisiszione dei dati
-    let nome = req.params.param;
-    console.log("Trovata struttura" + nome);
-    res.send();*/
 
-    /*
-    if(nome != ""){
-            const dati = 
-                strutture.find(d => d.Denominazione === nome);     
-            // richiesta andata a buon fine, restituisco l'elemento
-            console.log("Trovata struttura" + nome) 
-            res.render("./views/risultatoRicerca.html");
-        } else {
-            // richiesta non andata a buon fine
-            res.render('./views/404.html');
-        }    */
-//});
+app.get("/cercaTipo", (req, res) => {
+    // acquisisco dati
+    let tipo = req.query.Categoria.toUpperCase;
+    let trovaStrutturaTipo = strutture.find(s => s.Categoria === tipo);
+    if(trovaStrutturaTipo){
+        console.log("Le strutture che fanno parte della categoria " + tipo + "sono: ");
+        res.status(200).send(trovaStrutturaTipo);
+    }else{
+        res.status(404).send("Struttura non trovata!")
+        console.log("struttura INESISTENTE");
+    }
+});
+
+app.get("/cercaQuartiere", (req, res) => {
+    // acquisisco dati
+    let quartiere = req.query.Quartiere;
+    let trovaStrutturaQuart = [strutture.find(s => s.Quartiere === quartiere)];
+    if(trovaStrutturaQuart){
+        console.log("Le strutture che fanno parte del quartiere " + quartiere + "sono: ");
+        res.status(200).send(trovaStrutturaQuart);
+    }else{
+        res.status(404).send("Struttura non trovata!")
+        console.log("struttura INESISTENTE");
+    }
+});
+
+// 4° ENDPOINT GET. Necessario per inviare messaggio di errore a tutte le pagine non trovate
+app.get('*', (req, res) => {
+    res.render('./views/404.html');
+})
+
 /*
 app.get("/cercaNome/:param", (req, res) => {
 
@@ -121,20 +134,9 @@ app.get("/cercaNome/:param", (req, res) => {
     }
 })
 
-app.get("/ricercaTipo", (req, res) => {
-    if(strutture.includes(param)){   
-        let dati = 
-            strutture.find(d => d.Categoria === req.query.tipo);     
-        // richiesta andata a buon fine
-        // dalle strutture viene preso l'elemento 
-        res.status(200).send(strutture[strutture.indexOf(dati)]);
-    } else {
-        // richiesta non andata a buon fine
-        res.sendStatus(404);
-    }
-})*/
+*/
 
-/* --------------- ENDPOINT: POST -------------- */
+/******************************* ENDPOINT: POST *******************************/
 // devo inserire una struttura e definisco il tipo di azione
 app.post("/inserimento", (req, res) => {
      
@@ -152,13 +154,12 @@ app.post("/inserimento", (req, res) => {
     } else {
             // inserisco gli elementi nel file letto
             strutture.push(req.body);
-            // aggiungo elementi al file
-            //strutture = JSON.parse(inserimentoStruttura)        
+            console.log("inserimento avvenuto")
             res.status(200);
     }   
 });
 
-/* --------------- ENDPOINT: DELETE -------------- */
+/******************************* ENDPOINT: DELETE *******************************/
 app.delete("/rimuovi", (req, res) => {
     // acquisisisco i dati
     let nome = req.body.Denominazione;
@@ -167,9 +168,8 @@ app.delete("/rimuovi", (req, res) => {
     console.log("Rimozione della struttura " + nome);
         
     strutture.splice((strutture.indexOf(eliminaStruttura)), 1);
-        
-    fs.writeFileSync("strutture.json");
-    res.status(200).send("Elemento eliminato correttamente!");
+
+    res.status(200).send(eliminaStruttura);
     if(!eliminaStruttura){
         res.status(404).send("Struttura non trovata!")
     }    
