@@ -10,7 +10,7 @@
 
 ## Introduzione e descrizione del progetto
 
-Il progetto realizzato rappresenta una Restful API con l'obiettivo di fornire informazioni e posizioni si Strutture culturali a Bologna.
+Il progetto realizzato rappresenta una Restful API con l'obiettivo di fornire informazioni e posizioni sulle Strutture culturali a Bologna.
 Il sito è infatti costruito in modo da garantire la presenza di una mappa con tutti i punti di interesse resi visibili tramite dei marker, che mostreranno anche i dati di ogni centro culturale.
 
 I dati presenti nella piattaforma sono dati acquisiti da un Open Data distribuito dal sito **datiopen.it**, e riportati sulla mappa del sito sfruttando il servizio fornito dal sito **OpenStreetMap.org**.
