@@ -52,12 +52,12 @@
                         <p> Effettua la ricerca in base al tipo di struttura </p>
                     </div>
                     <div class="col" style="margin-top: 20px; padding: 0px 0px 0px 100px">
-                            <select id="categoria" style="margin-top: 10px">
+                            <select id="categoria" style="margin-top: 15px">
                                 <option value="GALLERIA">Galleria</option>
                                 <option value="MUSEO">Museo</option>
                                 <option value="TEATRO STORICO">Teatro Storico</option>
                             </select>
-                            <button class="btn" id="searchTipoBtn" > cerca</button>           
+                            <button class="btn" id="searchTipoBtn" style="margin-right: 25px;"> cerca</button>           
                     </div>
                 </div>
 
@@ -103,8 +103,8 @@
                     console.log(response);
                     const struttura = await response.json();
 
+                    document.getElementById("nome").value = "";
                     if(response.ok) {
-                       
                         table +=
                                 '<tr class="fw-lighter"><th scope="row">' + 
                                         JSON.stringify(struttura.Denominazione) + '</th>' +
@@ -116,8 +116,8 @@
                         table += "</td></tbody></table>";
                         document.getElementById('risultato').innerHTML = '<h4><i> Elemento ricercato:  </i></h4>' + table;
                     } else {
-                        console.log("non esiste questa struttura")
-                        document.getElementById("risultato").innerHTML =  "Struttura insesistente INESISTENTE";
+                        txt = await response.text();
+                        document.getElementById('risultato').innerHTML =  '<h4>ERRORE: ' + txt + '</h4>';
                     } 
                 }else{
                     alert("ATTENZIONE! Campo vuoto.")
@@ -145,26 +145,21 @@
                 const res =  await fetch('/cercaTipo?' + new URLSearchParams({Categoria: tipo}));
                 console.log(res);
                 const tipoStrutture = await res.json();
-                console.log(tipoStrutture);
+                console.log(tipoStrutture); 
 
-                    if(res.ok) {
-                        for(let element of tipoStrutture){                     
-                            table +=
-                                    '<tr class="fw-lighter"><th scope="row">' + 
-                                            JSON.stringify(element.Denominazione) + '</th>' +
-                                    '<td>' + JSON.stringify(element.Quartiere) + '</td>' + 
-                                    '<td>' + JSON.stringify(element.Indirizzo) + '</td>' +
-                                    '<td>' + JSON.stringify(element.Categoria) + '</td>' +
-                                    '<td>' + JSON.stringify(element.Descrizione) + '</td>';
-                        }
-                            table += "</td></tbody></table>";
-                            document.getElementById('risultato').innerHTML = '<h4><i> Elemento ricercato:  </i></h4>';
-                            document.getElementById('risultato').innerHTML += table;
-                    } else {
-                        console.log("non esiste questa struttura")
-                        document.getElementById("risultato").innerHTML =  "Struttura insesistente INESISTENTE";
-                    } 
-               
+                if(res.ok) {
+                    for(let element of tipoStrutture){                     
+                        table +=
+                                '<tr class="fw-lighter"><th scope="row">' + 
+                                        JSON.stringify(element.Denominazione) + '</th>' +
+                                '<td>' + JSON.stringify(element.Quartiere) + '</td>' +                                     
+                                '<td>' + JSON.stringify(element.Indirizzo) + '</td>' +
+                                '<td>' + JSON.stringify(element.Categoria) + '</td>' +
+                                '<td>' + JSON.stringify(element.Descrizione) + '</td>';
+                    }
+                        table += "</td></tbody></table>";
+                        document.getElementById('risultato').innerHTML = '<h4><i> Elemento ricercato:  </i></h4>' + table;
+                }
             } 
         </script>    
         
@@ -190,6 +185,7 @@
                     console.log(resp);
                     const structure = await resp.json();
 
+                    document.getElementById("quartiere").value = "";
                     if(resp.ok) {  
                         for(let element of structure){                     
                             table +=
@@ -201,11 +197,10 @@
                                     '<td>' + JSON.stringify(element.Descrizione) + '</td>';
                         }
                         table += "</td></tbody></table>";
-                        document.getElementById('risultato').innerHTML = '<h4><i> Elemento ricercato:  </i></h4>';
-                        document.getElementById('risultato').innerHTML += table;
+                        document.getElementById('risultato').innerHTML = '<h4><i> Elemento ricercato:  </i></h4>' + table;
                     } else {
-                        console.log("non esiste questa struttura")
-                        document.getElementById("risultato").innerHTML =  "Struttura INESISTENTE";
+                        txt = await response.text();
+                        document.getElementById('risultato').innerHTML =  '<h4>ERRORE: ' + txt + '</h4>';
                     } 
                 }else{
                     alert("ATTENZIONE! Campo vuoto.")

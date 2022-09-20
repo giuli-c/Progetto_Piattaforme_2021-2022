@@ -57,6 +57,7 @@
     <a href="/" class="btn">Torna alla Home Page</a>
   </div>
   
+  <div>
     <!-- inserimento Tabella -->
     <table id="table" style="margin-top: 20px">
         <colgroup>
@@ -78,21 +79,22 @@
         </thead>
         <tbody id="tabellaDati"></tbody>
     </table>
+  </div>
 
-    <script>
+  <script>
         
-        // al caricare della pagina viene chiamata la funzione "inserimentoDati"
-        window.addEventListener("load", inserimentoDati); 
+    // al caricare della pagina viene chiamata la funzione "inserimentoDati"
+    window.addEventListener("load", inserimentoDati); 
 
-        // chiamata http al sever dove vengono chiesti tutti i dati csv
-        async function inserimentoDati() {
-            // attendo la risposta della chiamata di recupero dei dati
-            const response = await fetch("/dataStrutture");
-            // procedi solo una volta che la promessa è stata risolta
-            const strutture = await response.json();
-            console.log("dati acquisiti") 
+      // chiamata http al sever dove vengono chiesti tutti i dati csv
+      async function inserimentoDati() {
+          // attendo la risposta della chiamata di recupero dei dati
+          const response = await fetch("/dataStrutture");
+          // procedi solo una volta che la promessa è stata risolta
+          const strutture = await response.json();
+          console.log("dati acquisiti") 
 
-            for(let i = 0; i < strutture.length; i++){
+          for(let i = 0; i < strutture.length; i++){
               inserimentoInTabella =
                   '<tr class="fw-lighter"><th scope="row">' + 
                            JSON.stringify(strutture[i].Denominazione) + '</th>' +
@@ -102,47 +104,8 @@
                   '<td>' + JSON.stringify(strutture[i].Descrizione) + '</td>';
                             
                   document.getElementById("tabellaDati").innerHTML += inserimentoInTabella;
-              }
-          }
-        
-
-  /*  var searchData = document.getElementById("search-Box");
-
-    
-    // stiamo dicendo che la ricerca (evento) viene generato quando 
-    // viene rilasciata una chiave
-    searchData.addEventListener('keyup', function(){
-        var keyword = this.value;
-        console.log(keyword);
-        keyword = keyword.toUpperCase();
-        // acquisisco la tabella
-        var table = document.getElementById(tabellaDati);
-        // acquisisco tutte le righe
-        var all_tr = table.getElementById(row);
-        // acquisisco il nome di ogni colonna e il testo al suo interno
-        for(var i = 0; i < all_tr.lenght; i++){
-            var name_col = all_tr[i].getElementById(nome)[0];
-            var quartiere_col = all_tr[i].getElementById(quartiere)[1];
-            var categoria_col = all_tr[i].getElementById(categoria)[3];
-            
-            if(name_col && quartiere_col && categoria_col){
-                  var name_value = name_column.textContent || name_column.innerText;
-                  var quartiere_col = email_column.textContent || email_column.innerText;
-                  
-                  var name_value = name_value.toUpperCase();
-                  var quartiere_value = quartiere_value.toUpperCase();
-
-                  if((name_value.indexOf(keyword) > -1) || (quartiere_value.indexOf(keyword) > -1)){
-                    console.log("found");
-                              //all_tr[i].style.display = ""; // show
-                  }else{
-                    //all_tr[i].style.display = "none"; // hide
-                              console.log("not found");
-                  }
-                }
-		}
-    });*/
-    </script>
-  </div>
+            }
+        }
+  </script>
 </body>
 </html>

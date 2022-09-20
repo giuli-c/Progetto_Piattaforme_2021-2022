@@ -42,7 +42,7 @@
                 </div>
             </div>
     </div>
-    <div class="container text-center">
+    <div class="container text-center" style="margin-bottom: 50px">
         <a href="/" class="btn" id="homePage" style="margin-top:20px;">Torna alla Home Page</a>
         <div class="container" id="Rimozione"></div>
     </div>
@@ -82,7 +82,8 @@
                                         body: JSON.stringify(data)                                                            
                                     });
                 const strutture = await response.json();
-                
+
+                document.getElementById("nome").value = "";                
                 if(response.ok) {         
                     // procedi solo una volta che la promessa è stata risolta
                     console.log("dati acquisiti")            
@@ -96,7 +97,11 @@
                                 '<td>' + JSON.stringify(strutture.Descrizione) + '</td>';
                     table += "</td></tbody></table>";
                     document.getElementById("Rimozione").innerHTML = '<h4><i> L elemento rimosso è:  </i></h4>' + table;
-                }                    
+                }
+                else {
+                        txt = await response.text();
+                        document.getElementById('risultato').innerHTML =  '<h4>ERRORE: ' + txt + '</h4>';
+                    }                     
             }else{
                 alert("ATTENZIONE! Non è stato possibile rimuovere alcuna struttura..")
             }
