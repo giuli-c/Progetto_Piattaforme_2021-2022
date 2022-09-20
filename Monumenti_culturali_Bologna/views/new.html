@@ -126,6 +126,7 @@
     element.addEventListener("click", newStructur);
 
     async function newStructur(){
+        // acquisisco i valori inseriti
         const denominazione = document.getElementById("denominazione").value;
         const quartiere     = document.getElementById("quartiere").value;
         const indirizzo     = document.getElementById("indirizzo").value;
@@ -158,8 +159,8 @@
                                                              },
                                                     body: JSON.stringify(data),
                                                 })
-        }else{
-            alert("Campi richiesti incompleti! Non è stato possibile aggiungere nessuna struttura!");
+        } else{
+            alert("Struttura già presente o campi mancanti!");
         }
     }
     

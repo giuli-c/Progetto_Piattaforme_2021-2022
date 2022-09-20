@@ -105,7 +105,9 @@
 
         // chiamata http al sever dove vengono chiesti tutti i dati csv
         async function getStrutture() {
+           // attendo la risposta della chiamta fatta
             const response = await fetch("/dataStrutture");
+            // trasformo la risposta in un oggetto json
             const struct = await response.json();
 
             const markersInfo = []; // [lat,lon] vettore

@@ -42,8 +42,7 @@
                                 placeholder="Search.." 
                                 name="nome" 
                                 id="nome">               
-                            <button class="btn" id="searchNameBtn" >
-                            cerca</button>
+                            <button class="btn" id="searchNameBtn"> cerca </button>
                     </div>
                 </div>
 
@@ -57,7 +56,7 @@
                                 <option value="MUSEO">Museo</option>
                                 <option value="TEATRO STORICO">Teatro Storico</option>
                             </select>
-                            <button class="btn" id="searchTipoBtn" style="margin-right: 25px;"> cerca</button>           
+                            <button class="btn" id="searchTipoBtn" style="margin-right: 25px;"> cerca </button>           
                     </div>
                 </div>
 
@@ -76,12 +75,13 @@
                 </div>
         </div>
         <div class="container text-center" style="margin-bottom:50px;">
-            <a href="/" class="btn" id="homePage" style="margin-top:20px;">Torna alla Home Page</a>
+            <a href="/" class="btn" id="homePage" style="margin-top:20px;"> Torna alla Home Page </a>
         </div>
 
         <div class="container text-center" id = "risultato"></div> 
     
         <script>         
+            // al click del bottone parte la funzione
             const element = document.getElementById("searchNameBtn");
             element.addEventListener("click", researchStructureName);
             
@@ -96,15 +96,21 @@
                         '<th scope="col"> Descrizione </th></tr>' +
                         '</thead><tbody id="tabellaDati">';
 
+                // acquisisco valore inserito
                 const nome = document.getElementById("nome").value;
 
                 if(nome != ""){
+                    // attendo la risposta della chiamata
                     const response =  await fetch('/cercaNome?' + new URLSearchParams({Denominazione: nome}));
                     console.log(response);
-                    const struttura = await response.json();
 
-                    document.getElementById("nome").value = "";
                     if(response.ok) {
+                        // trasformo la risposta passata in un oggetto json
+                        const struttura = await response.json();
+                        // pulisco i campi
+                        document.getElementById("nome").value = "";
+
+                        // inserisco i dati della risposta in tabella
                         table +=
                                 '<tr class="fw-lighter"><th scope="row">' + 
                                         JSON.stringify(struttura.Denominazione) + '</th>' +
@@ -116,6 +122,7 @@
                         table += "</td></tbody></table>";
                         document.getElementById('risultato').innerHTML = '<h4><i> Elemento ricercato:  </i></h4>' + table;
                     } else {
+                        document.getElementById("nome").value = "";
                         txt = await response.text();
                         document.getElementById('risultato').innerHTML =  '<h4>ERRORE: ' + txt + '</h4>';
                     } 
@@ -142,13 +149,15 @@
 
                 const tipo = document.getElementById("categoria").value;
 
+                // attendo la risposta della chiamata
                 const res =  await fetch('/cercaTipo?' + new URLSearchParams({Categoria: tipo}));
                 console.log(res);
-                const tipoStrutture = await res.json();
-                console.log(tipoStrutture); 
 
                 if(res.ok) {
-                    for(let element of tipoStrutture){                     
+                    // trasformo la risposta passata in un oggetto json
+                    const tipoStrutture = await res.json();
+                    for(let element of tipoStrutture){ 
+                         // inserisco i dati della risposta in tabella                    
                         table +=
                                 '<tr class="fw-lighter"><th scope="row">' + 
                                         JSON.stringify(element.Denominazione) + '</th>' +
@@ -181,13 +190,17 @@
                 const quartiere = document.getElementById("quartiere").value;
 
                 if(quartiere != ""){
+                    // attendo la risposta della chiamata
                     const resp =  await fetch('/cercaQuartiere?' + new URLSearchParams({Quartiere: quartiere}));
                     console.log(resp);
-                    const structure = await resp.json();
 
-                    document.getElementById("quartiere").value = "";
                     if(resp.ok) {  
-                        for(let element of structure){                     
+                        // trasformo la risposta passata in un oggetto json
+                        const structure = await resp.json();
+                        document.getElementById("quartiere").value = "";
+                        
+                        for(let element of structure){   
+                             // inserisco i dati della risposta in tabella                  
                             table +=
                                     '<tr class="fw-lighter"><th scope="row">' + 
                                             JSON.stringify(element.Denominazione) + '</th>' +
@@ -199,8 +212,9 @@
                         table += "</td></tbody></table>";
                         document.getElementById('risultato').innerHTML = '<h4><i> Elemento ricercato:  </i></h4>' + table;
                     } else {
-                        txt = await response.text();
-                        document.getElementById('risultato').innerHTML =  '<h4>ERRORE: ' + txt + '</h4>';
+                        document.getElementById("quartiere").value = "";
+                        txt = await resp.text();
+                        document.getElementById('risultato').innerHTML =  '<h4> ERRORE: ' + txt + '</h4>';
                     } 
                 }else{
                     alert("ATTENZIONE! Campo vuoto.")

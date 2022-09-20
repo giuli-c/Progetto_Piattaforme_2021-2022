@@ -1,12 +1,11 @@
 /******************************* richiamo tutti i moduli *******************************/
-const express = require('express')                              // chiamo il modulo express
-const app = express()                                           // creo server
-//const res = require('ejs')                                      // chiamo il modulo ejs
-const fs = require('fs');                                       // chiamo il modulo fs
-const CSVtoJSON = require('csvtojson')
+const express = require('express');                             // chiamo il modulo express
+const app = express();                                           // creo server
+const fs = require('fs');
+const CSVtoJSON = require('csvtojson');
 
 /***************************** conversione del file da csv a json *****************************/
-const csvfilepath = "views/DataStrutture.csv"
+const csvfilepath = "views/DataStrutture.csv";
 let strutture;
 
 // trasformazione del file CSV in json
@@ -64,6 +63,7 @@ app.get('/dataStrutture', (req, res) => {
 });
 
 // 3° ENDPOINT GET. Necessario per ricerca delle strutture
+// ricerca in base al nome
 app.get("/cercaNome", (req, res) => {   
     // acquisisisco i dati
     let nome = req.query.Denominazione;
@@ -73,10 +73,11 @@ app.get("/cercaNome", (req, res) => {
         console.log("Trovata struttura: " + nome);
         res.status(200).send(trovaStrutturaNome);
     }else{
-        res.status(404).send("Struttura inesistente!");
+        res.status(404).send("\"" + nome + "\": Struttura inesistente!");
     }
 });
 
+// ricerca in base alla categoria
 app.get("/cercaTipo", (req, res) => {
     // acquisisco dati
     let tipo = req.query.Categoria;
@@ -88,13 +89,14 @@ app.get("/cercaTipo", (req, res) => {
         }
     }    
 
-    if(dati){
+    if(dati.length > 0){
         res.status(200).send(dati);
     }else{
         res.status(404).send("Struttura non trovata!")
     }
 });
 
+// ricerca in base al quartiere
 app.get("/cercaQuartiere", (req, res) => {
     // acquisisco dati
     let quartiere = req.query.Quartiere;
@@ -106,10 +108,10 @@ app.get("/cercaQuartiere", (req, res) => {
         }
     }    
 
-    if(dati){
+    if(dati.length > 0){
         res.status(200).send(dati);
     }else{
-        res.status(404).send("Struttura inesistente!")
+        res.status(404).send("Nel quartiere " + quartiere + " non esiste alcuna struttura!")
     }
 });
 
@@ -128,28 +130,15 @@ app.post("/inserimento", (req, res) => {
     let indirizzo     = req.body.indirizzo;
     let descrizione   = req.body.descrizione;
     let latitudine    = req.body.latitudine;
-    let longitudine   = req.body.longitudine;
+    let longitudine   = req.body.longitudine; 
 
     // controllo che non siano vuoti o che il dato non sia già presente
     if(denominazione == "" || quartiere == "" || indirizzo == "" ||
-        latitudine == "" || longitudine == "" /*&& 
-        denominazione == denominazione || quartiere == quartiere || 
-        indirizzo == indirizzo || latitudine == latitudine || 
-        longitudine == longitudine*/){
-            res.status(404).send("struttura già esistente!");
-    } else {
-        let data = '\n' + // Per evitare di appenderlo all'ultima riga
-                denominazione + ',' +
-                quartiere     + ',' +
-                indirizzo     + ',' + 
-                descrizione   + ',' + 
-                latitudine    + ',' + 
-                longitudine   + ',';
-
-        console.log(data);
-        // inserisco gli elementi nel file letto
-        //strutture.push(req.body);
-        fs.appendFileSync('./views/DataStrutture.csv', data);
+        latitudine == "" || longitudine == ""){
+            res.status(404).send("struttura già presente!");
+    } else {   
+         // inserisco gli elementi nell'oggetto Json
+        strutture.push(req.body);   
         res.status(200);
     }   
 });
@@ -161,14 +150,19 @@ app.delete("/rimuovi", (req, res) => {
     
     // ricerco la struttura richiesta
     let eliminaStruttura = strutture.find(s => s.Denominazione === nome);
+
+    // se la struttura non è presente invio 404
+    if(!eliminaStruttura) return res.status(404).send("Impossibile rimuovere \"" + nome + "\". Struttura inesistente!")
+    
     console.log("Rimozione della struttura " + nome);
         
+    // se la struttura è presente la elimino e invio 200, altrimenti 400.
     for(let element of strutture){
         if(element.Denominazione === nome){
             strutture.splice((strutture.indexOf(eliminaStruttura)), 1);
             res.status(200).send(eliminaStruttura);
         } else {
-            res.status(404).send("Impossibile rimuovere la struttura! Struttura non trovata.")
+            res.status(400).send("Parametri non validi.")
         }    
     }
   })
