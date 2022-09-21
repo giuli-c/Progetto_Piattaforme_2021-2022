@@ -1,7 +1,6 @@
 /******************************* richiamo tutti i moduli *******************************/
 const express = require('express');                             // chiamo il modulo express
 const app = express();                                           // creo server
-const fs = require('fs');
 const CSVtoJSON = require('csvtojson');
 
 /***************************** conversione del file da csv a json *****************************/
@@ -128,7 +127,6 @@ app.post("/inserimento", (req, res) => {
     let denominazione = req.body.denominazione;
     let quartiere     = req.body.quartiere;
     let indirizzo     = req.body.indirizzo;
-    let descrizione   = req.body.descrizione;
     let latitudine    = req.body.latitudine;
     let longitudine   = req.body.longitudine; 
 
@@ -137,6 +135,7 @@ app.post("/inserimento", (req, res) => {
         latitudine == "" || longitudine == ""){
             res.status(404).send("struttura già presente!");
     } else {   
+        console.log(req.body);
          // inserisco gli elementi nell'oggetto Json
         strutture.push(req.body);   
         res.status(200);
@@ -152,17 +151,13 @@ app.delete("/rimuovi", (req, res) => {
     let eliminaStruttura = strutture.find(s => s.Denominazione === nome);
 
     // se la struttura non è presente invio 404
-    if(!eliminaStruttura) return res.status(404).send("Impossibile rimuovere \"" + nome + "\". Struttura inesistente!")
-    
-    console.log("Rimozione della struttura " + nome);
-        
-    // se la struttura è presente la elimino e invio 200, altrimenti 400.
-    for(let element of strutture){
-        if(element.Denominazione === nome){
-            strutture.splice((strutture.indexOf(eliminaStruttura)), 1);
+    if(!eliminaStruttura){
+        res.status(404).send("Impossibile rimuovere \"" + nome + "\". Struttura inesistente!")
+    }else{
+        strutture.splice((strutture.indexOf(eliminaStruttura)), 1);
             res.status(200).send(eliminaStruttura);
-        } else {
-            res.status(400).send("Parametri non validi.")
-        }    
     }
-  })
+    
+    console.log("Rimozione della struttura " + nome);       
+});
+
